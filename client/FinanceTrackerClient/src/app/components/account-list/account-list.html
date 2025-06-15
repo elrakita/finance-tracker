@@ -1,0 +1,36 @@
+<div class="account-list-container">
+  <h2>My Accounts</h2>
+
+  @if (loading) {
+    <div class="loading">
+      Loading accounts...
+    </div>
+  }
+
+  @if (error) {
+    <div class="error">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && !error) {
+    @if (accounts.length === 0) {
+      <div class="no-accounts">
+        No accounts found. Create your first account!
+      </div>
+    }
+
+    @if (accounts.length > 0) {
+      <div class="accounts-grid">
+        @for (account of accounts; track account.id) {
+          <div class="account-card">
+            <h3>{{ account.name }}</h3>
+            <p class="account-type">{{ getAccountTypeName(account.type) }}</p>
+            <p class="account-balance">${{ account.balance | number:'1.2-2' }}</p>
+            <p class="account-date">Created: {{ account.createdAt | date:'short' }}</p>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
