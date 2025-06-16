@@ -73,10 +73,20 @@ export class CreateAccountComponent implements OnInit {
             }
           }
         },
-        error: (error) => {
+        error: (httpError) => {
           this.isLoading = false;
-          this.errorMessage = 'Failed to create account. Please try again.';
-          console.error('Error creating account:', error);
+
+          // Check if it's an HTTP error with a response body
+          if (httpError.error && httpError.error.success === false) {
+            this.errorMessage = httpError.error.message;
+            if (httpError.error.errors && httpError.error.errors.length > 0) {
+              this.errorMessage += ': ' + httpError.error.errors.join(', ');
+            }
+          } else {
+            this.errorMessage = 'Failed to create account. Please try again.';
+          }
+
+          console.error('Error creating account:', httpError);
         }
       });
     } else {
