@@ -1,0 +1,124 @@
+<div class="create-account-container">
+  <div class="form-card">
+    <div class="card-header">
+      <h2>Create New Account</h2>
+      <p>Add a new financial account to track your money</p>
+    </div>
+
+    <div class="card-content">
+      <!-- Success Message -->
+      <div class="success-message" *ngIf="successMessage">
+        <div class="alert success">
+          <div class="alert-icon">✅</div>
+          <div class="alert-content">
+            <span class="alert-title">Success!</span>
+            <p>{{ successMessage }}</p>
+            <small>Redirecting to accounts...</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="errorMessage">
+        <div class="alert error">
+          <div class="alert-icon">❌</div>
+          <div class="alert-content">
+            <span class="alert-title">Error</span>
+            <p>{{ errorMessage }}</p>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="accountForm" (ngSubmit)="onSubmit()" *ngIf="!successMessage">
+        <!-- Account Name -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            <span class="label-icon">📝</span>
+            Account Name *
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="name"
+              class="form-input"
+              formControlName="name"
+              placeholder="e.g., Chase Checking"
+              [class.error]="accountForm.get('name')?.invalid && accountForm.get('name')?.touched">
+          </div>
+          <div class="error-text" *ngIf="accountForm.get('name')?.invalid && accountForm.get('name')?.touched">
+            <span class="error-icon">⚠️</span>
+            {{ getErrorMessage('name') }}
+          </div>
+        </div>
+
+        <!-- Account Type -->
+        <div class="form-group">
+          <label for="type" class="form-label">
+            <span class="label-icon">🏦</span>
+            Account Type *
+          </label>
+          <div class="input-wrapper">
+            <select
+              id="type"
+              class="form-select"
+              formControlName="type"
+              [class.error]="accountForm.get('type')?.invalid && accountForm.get('type')?.touched">
+              <option value="">Select account type</option>
+              <option *ngFor="let type of accountTypes" [value]="type.value">
+                {{ type.label }}
+              </option>
+            </select>
+          </div>
+          <div class="error-text" *ngIf="accountForm.get('type')?.invalid && accountForm.get('type')?.touched">
+            <span class="error-icon">⚠️</span>
+            {{ getErrorMessage('type') }}
+          </div>
+        </div>
+
+        <!-- Initial Balance -->
+        <div class="form-group">
+          <label for="balance" class="form-label">
+            <span class="label-icon">💰</span>
+            Initial Balance *
+          </label>
+          <div class="input-wrapper currency-input">
+            <span class="currency-symbol">$</span>
+            <input
+              type="number"
+              id="balance"
+              class="form-input currency-field"
+              step="0.01"
+              formControlName="balance"
+              placeholder="0.00"
+              [class.error]="accountForm.get('balance')?.invalid && accountForm.get('balance')?.touched">
+          </div>
+          <div class="error-text" *ngIf="accountForm.get('balance')?.invalid && accountForm.get('balance')?.touched">
+            <span class="error-icon">⚠️</span>
+            {{ getErrorMessage('balance') }}
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onCancel()"
+            [disabled]="isLoading">
+            <span class="btn-icon">❌</span>
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isLoading || accountForm.invalid">
+            <span class="btn-icon" *ngIf="!isLoading">💾</span>
+            <span class="btn-icon loading" *ngIf="isLoading">⏳</span>
+            <span *ngIf="!isLoading">Create Account</span>
+            <span *ngIf="isLoading">Creating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+.create-account-btn {
+  background: linear-gradient(135deg, #A0956B, #8B7355);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(139, 115, 85, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #8B7355, #6F5B43);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 115, 85, 0.4);
+  }
+}

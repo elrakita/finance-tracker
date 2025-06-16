@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AccountService } from '../../services/account.service';
 import { Account, AccountType } from '../../models/account';
 
@@ -15,7 +16,7 @@ export class AccountListComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadAccounts();
@@ -26,10 +27,16 @@ export class AccountListComponent implements OnInit {
     this.error = null;
 
     this.accountService.getAccounts().subscribe({
-      next: (data) => {
-        this.accounts = data;
-        this.loading = false;
-        console.log('Accounts loaded:', data);
+      next: (response) => {
+        if (response.success && response.data) {
+          this.accounts = response.data;
+          this.loading = false;
+          console.log('Accounts loaded:', response.data);
+        } else {
+          this.error = response.message || 'Failed to load accounts';
+          this.loading = false;
+          console.error('API Error:', response.message);
+        }
       },
       error: (error) => {
         this.error = 'Failed to load accounts';
@@ -37,6 +44,10 @@ export class AccountListComponent implements OnInit {
         console.error('Error loading accounts:', error);
       }
     });
+  }
+
+  navigateToCreate(): void {
+    this.router.navigate(['/accounts/create']);
   }
 
   getAccountTypeName(type: AccountType): string {
