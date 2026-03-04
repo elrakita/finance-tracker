@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './account-form.scss'
 })
 export class AccountFormLayout {
-  @Input({ required: true }) form!: FormGroup;
+  @Input({ required: true }) accountForm!: FormGroup;
   @Input() successMessage: string | null = null;
   @Input() errorMessage: string | null = null;
   @Input() isLoading: boolean = false;
