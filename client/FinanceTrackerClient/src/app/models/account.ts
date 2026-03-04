@@ -14,10 +14,16 @@ export enum AccountType {
   CreditCard = 3
 }
 
-export interface CreateAccountRequest {
+export interface AccountRequest {
   name: string;
   type: AccountType;
+}
+
+export interface CreateAccountRequest extends AccountRequest {
   balance: number;
+}
+
+export interface UpdateAccountRequest extends AccountRequest {
 }
 
 export interface ApiResponse<T> {

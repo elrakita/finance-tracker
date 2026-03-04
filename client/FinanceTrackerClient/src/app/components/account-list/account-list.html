@@ -29,6 +29,13 @@
       <div class="accounts-grid">
         @for (account of accounts; track account.id) {
           <div class="account-card">
+            <div class="card-actions">
+              <button class="ellipsis-btn">⋮</button>
+                <div class="action-buttons">
+                  <button class="edit-btn" (click)="onEdit(account)">Edit</button>
+                  <button class="delete-btn">Delete</button>
+              </div>
+            </div> 
             <h3>{{ account.name }}</h3>
             <p class="account-type">{{ getAccountTypeName(account.type) }}</p>
             <p class="account-balance">${{ account.balance | number:'1.2-2' }}</p>

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { AccountService } from '../../services/account.service';
 import { Account, AccountType } from '../../models/account';
+import { AccountEditComponent } from '../account-edit/account-edit';
+
 
 @Component({
   selector: 'app-account-list',
@@ -15,6 +18,7 @@ export class AccountListComponent implements OnInit {
   accounts: Account[] = [];
   loading = false;
   error: string | null = null;
+  private dialog = inject(MatDialog); 
 
   constructor(private accountService: AccountService, private router: Router) { }
 
@@ -58,4 +62,20 @@ export class AccountListComponent implements OnInit {
       default: return 'Unknown';
     }
   }
+
+  onEdit(account: any) {
+    const dialogRef = this.dialog.open(AccountEditComponent, {
+      data: account,
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // 'result' contains the updated fields from the form
+        console.log('Update this account in .NET:', account.id, result);
+      }
+    });
+  }
+
+
 }

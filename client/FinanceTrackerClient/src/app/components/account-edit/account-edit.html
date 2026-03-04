@@ -1,0 +1,23 @@
+<div class="edit-container">
+  <div class="form-card">
+  <div class="card-header">
+    <h2>Edit Account</h2>
+  </div>
+
+  <mat-dialog-content [formGroup]="accountForm" class="form-body">
+    <div class="field">
+      <label>Account Name</label>
+      <input formControlName="name" type="text">
+    </div>
+
+    <div class="field">
+      <label>Balance ($)</label>
+      <input formControlName="balance" type="number">
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button class="btn-primary" (click)="cancel()">Cancel</button>
+    <button class="btn-primary" (click)="save()" [disabled]="accountForm.invalid">Save Changes</button>
+  </mat-dialog-actions>
+</div>

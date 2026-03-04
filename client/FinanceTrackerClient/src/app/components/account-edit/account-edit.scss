@@ -1,0 +1,46 @@
+.edit-container {
+  background: #faf8f0;
+  padding: 1rem;
+  border-radius: 15px;
+
+  h2 {
+    color: #5d4e37;
+    font-weight: 700;
+  }
+
+  .form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding-top: 1rem;
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+
+      label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #8b7355;
+        text-transform: uppercase;
+      }
+
+      input {
+        padding: 0.7rem;
+        border-radius: 8px;
+        border: 1px solid rgba(139, 115, 85, 0.3);
+        &:focus { outline: 1px solid #d2b48c; }
+      }
+    }
+  }
+
+  .btn-primary {
+    background: linear-gradient(90deg, #d2b48c, #deb887);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+}
