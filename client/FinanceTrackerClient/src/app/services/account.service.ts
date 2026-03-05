@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Account, CreateAccountRequest, ApiResponse } from '../models/account';
+import { Account, CreateAccountRequest, ApiResponse, UpdateAccountRequest } from '../models/account';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -22,5 +22,9 @@ export class AccountService {
 
   createAccount(account: CreateAccountRequest): Observable<ApiResponse<Account>> {
     return this.http.post<ApiResponse<Account>>(this.apiUrl, account);
+  }
+
+  updateAccount(id: string, account: UpdateAccountRequest): Observable<ApiResponse<Account>> {
+    return this.http.put<ApiResponse<Account>>(`${this.apiUrl}/${id}`, account);
   }
 }

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountService } from '../../services/account.service';
 import { Account, AccountType } from '../../models/account';
-import { AccountEditComponent } from '../account-edit/account-edit';
+import { AccountFormComponent } from '../account-form/account-form';
 
 
 @Component({
@@ -50,8 +50,17 @@ export class AccountListComponent implements OnInit {
     });
   }
 
-  navigateToCreate(): void {
-    this.router.navigate(['/accounts/create']);
+  onCreate(): void {
+    const dialogRef = this.dialog.open(AccountFormComponent, {
+      width: '600px',
+      data: null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadAccounts();
+      }
+    });
   }
 
   getAccountTypeName(type: AccountType): string {
@@ -64,9 +73,9 @@ export class AccountListComponent implements OnInit {
   }
 
   onEdit(account: any) {
-    const dialogRef = this.dialog.open(AccountEditComponent, {
+    const dialogRef = this.dialog.open(AccountFormComponent, {
       data: account,
-      width: '400px'
+      width: '600px'
     });
 
     dialogRef.afterClosed().subscribe(result => {

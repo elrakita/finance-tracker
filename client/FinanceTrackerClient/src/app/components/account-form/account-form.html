@@ -1,0 +1,141 @@
+<div class="form-card">
+  <!-- Dynamic Header -->
+  <div class="card-header" mat-dialog-title>
+    <h2>{{ isEditMode ? 'Edit Account' : 'Create New Account' }}</h2>
+    <p>
+      {{ isEditMode ? 'Update details for your ' + data?.name + ' account' : 'Add a new financial account to track your money' }}
+    </p>
+  </div>
+
+  <div class="card-content">
+    <!-- Success Message -->
+    @if (successMessage) {
+      <div class="success-message">
+        <div class="alert success">
+          <div class="alert-icon">✅</div>
+          <div class="alert-content">
+            <span class="alert-title">Success!</span>
+            <p>{{ successMessage }}</p>
+            <small>{{ isEditMode ? 'Closing...' : 'Redirecting to accounts...' }}</small>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Error Message -->
+    @if (errorMessage) {
+      <div class="error-message">
+        <div class="alert error">
+          <div class="alert-icon">❌</div>
+          <div class="alert-content">
+            <span class="alert-title">Error</span>
+            <p>{{ errorMessage }}</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (!successMessage) {
+      <!-- Single form for both actions -->
+      <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+        
+        <mat-dialog-content>
+          <!-- Account Name -->
+          <div class="form-group">
+            <label for="name" class="form-label">
+              <span class="label-icon">📝</span>
+              Account Name *
+            </label>
+            <div class="input-wrapper">
+              <input 
+                type="text" 
+                id="name" 
+                class="form-input" 
+                formControlName="name" 
+                placeholder="e.g., Chase Checking" 
+                [class.error]="accountForm.get('name')?.invalid && accountForm.get('name')?.touched">
+            </div>
+            @if (accountForm.get('name')?.invalid && accountForm.get('name')?.touched) {
+              <div class="error-text">
+                <span class="error-icon">⚠️</span>
+                {{ getErrorMessage('name') }}
+              </div>
+            }
+          </div>
+
+          <!-- Account Type -->
+          <div class="form-group">
+            <label for="type" class="form-label">
+              <span class="label-icon">🏦</span>
+              Account Type *
+            </label>
+            <div class="input-wrapper">
+              <select 
+                id="type" 
+                class="form-select" 
+                formControlName="type" 
+                [class.error]="accountForm.get('type')?.invalid && accountForm.get('type')?.touched">
+                <option value="">Select account type</option>
+                @for (type of accountTypes; track type.value) {
+                  <option [value]="type.value">{{ type.label }}</option>
+                }
+              </select>
+            </div>
+            @if (accountForm.get('type')?.invalid && accountForm.get('type')?.touched) {
+              <div class="error-text">
+                <span class="error-icon">⚠️</span>
+                {{ getErrorMessage('type') }}
+              </div>
+            }
+          </div>
+
+          <!-- Balance -->
+          @if (!isEditMode) {
+            <div class="form-group">
+              <label for="balance" class="form-label">
+                <span class="label-icon">💰</span>
+                Initial Balance *
+              </label>
+              <div class="input-wrapper currency-input">
+                <span class="currency-symbol">$</span>
+                <input 
+                  type="number" 
+                  id="balance" 
+                  class="form-input currency-field" 
+                  step="0.01" 
+                  formControlName="balance" 
+                  placeholder="0.00" 
+                  [class.error]="accountForm.get('balance')?.invalid && accountForm.get('balance')?.touched">
+              </div>
+              @if (accountForm.get('balance')?.invalid && accountForm.get('balance')?.touched) {
+                <div class="error-text">
+                  <span class="error-icon">⚠️</span>
+                  {{ getErrorMessage('balance') }}
+                </div>
+              }
+            </div>
+          }
+        </mat-dialog-content>
+
+        <!-- Action Buttons -->
+        <div class="form-actions" mat-dialog-actions align="end">
+          <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="isLoading">
+            <span class="btn-icon">❌</span>
+            Cancel
+          </button>
+          
+          <button type="submit" class="btn btn-primary" [disabled]="isLoading || accountForm.invalid">
+            <span class="btn-icon">{{ isLoading ? '⏳' : '💾' }}</span>
+            <span>
+              @if (isLoading) {
+                {{ isEditMode ? 'Saving...' : 'Creating...' }}
+              } @else {
+                {{ isEditMode ? 'Save Changes' : 'Create Account' }}
+              }
+            </span>
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>
