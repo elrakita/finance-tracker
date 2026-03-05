@@ -3,7 +3,7 @@ using FinanceTracker.Api.Models;
 
 namespace FinanceTracker.Api.DTOs
 {
-    public class CreateAccountRequest
+    public class AccountBaseRequest
     {
         [Required(ErrorMessage = "Account name is required")]
         [MaxLength(100, ErrorMessage = "Account name cannot exceed 100 characters")]
@@ -12,11 +12,17 @@ namespace FinanceTracker.Api.DTOs
 
         [Required(ErrorMessage = "Account type is required")]
         public AccountType Type { get; set; }
+    }
 
-        [Required(ErrorMessage = "Balance is required")]
+    public class CreateAccountRequest : AccountBaseRequest
+    {
+        [Required(ErrorMessage = "Initial balance is required")]
         [Range(-999999.99, 999999.99, ErrorMessage = "Balance must be between -999,999.99 and 999,999.99")]
         public decimal Balance { get; set; } = 0.00m;
     }
+
+    public class UpdateAccountRequest : AccountBaseRequest
+    { }
 
     public class AccountResponse
     {

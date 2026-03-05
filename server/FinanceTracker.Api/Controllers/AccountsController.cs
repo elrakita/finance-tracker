@@ -87,21 +87,7 @@ namespace FinanceTracker.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<AccountResponse>>> PostAccount([FromBody] CreateAccountRequest request)
         {
-            // Validate model state
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-
-                return BadRequest(new ApiResponse<AccountResponse>
-                {
-                    Success = false,
-                    Message = "Validation failed",
-                    Errors = errors
-                });
-            }
+            if (!ModelState.IsValid) return ValidationBadRequest();
 
             try
             {
@@ -153,6 +139,45 @@ namespace FinanceTracker.Api.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ApiResponse<AccountResponse>>> PutAccount(Guid id, [FromBody] UpdateAccountRequest request)
+        {
+            if (!ModelState.IsValid) return ValidationBadRequest();
+
+            try
+            {
+                var account = await context.Accounts.FindAsync(id);
+                if (account == null)
+                {
+                    return NotFound(new ApiResponse<AccountResponse> { Success = false, Message = "Account not found" });
+                }
+
+                // Check if name is taken by ANOTHER account
+                if (await context.Accounts.AnyAsync(a => a.Name.ToLower() == request.Name.ToLower() && a.Id != id))
+                {
+                    return BadRequest(new ApiResponse<AccountResponse> { Success = false, Message = "Account name already exists" });
+                }
+
+                // Update only allowed fields
+                account.Name = request.Name.Trim();
+                account.Type = request.Type;
+                account.UpdatedAt = DateTime.UtcNow;
+
+                await context.SaveChangesAsync();
+
+                return Ok(new ApiResponse<AccountResponse> {
+                    Success = true,
+                    Message = "Account updated successfully",
+                    Data = MapToResponse(account)
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse<AccountResponse> { Success = false, Message = "Update failed", Errors = new() { ex.Message } });
+            }
+        }
+
+
         private static AccountResponse MapToResponse(Account account)
         {
             return new AccountResponse
@@ -165,5 +190,21 @@ namespace FinanceTracker.Api.Controllers
                 UpdatedAt = account.UpdatedAt
             };
         }
+
+        private BadRequestObjectResult ValidationBadRequest()
+        {
+            var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+
+            return BadRequest(new ApiResponse<AccountResponse>
+            {
+                Success = false,
+                Message = "Validation failed",
+                Errors = errors
+            });
+        }
+
     }
 }

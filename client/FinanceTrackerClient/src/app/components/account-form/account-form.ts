@@ -120,7 +120,7 @@ export class AccountFormComponent {
   }
 
   onCancel(): void {
-    //this.router.navigate(['/accounts']);
+    this.router.navigate(['/accounts']);
   }
   save(): void {
     if (this.accountForm.valid) {

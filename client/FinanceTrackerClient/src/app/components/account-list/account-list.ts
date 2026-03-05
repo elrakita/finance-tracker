@@ -80,8 +80,7 @@ export class AccountListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // 'result' contains the updated fields from the form
-        console.log('Update this account in .NET:', account.id, result);
+        this.loadAccounts();
       }
     });
   }
