@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AccountService } from '../../services/account.service';
 import { Account, AccountType } from '../../models/account';
 import { AccountFormComponent } from '../account-form/account-form';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 
 
 @Component({
@@ -85,5 +86,27 @@ export class AccountListComponent implements OnInit {
     });
   }
 
+  onDelete(account: any) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { 
+        title: "Confirm Deletion", 
+        message: `Are you sure you want to delete the account: ${account.name}?`
+      },
+      width: '600px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.accountService.deleteAccount(account.id).subscribe({
+          next: () => {
+            this.loadAccounts();
+          },
+          error: (err) => {
+            console.error('Delete failed', err);
+          }
+        });
+      }
+    });
+  }
 
 }

@@ -177,6 +177,42 @@ namespace FinanceTracker.Api.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ApiResponse<object>>> DeleteAccount(Guid id)
+        {
+            try
+            {
+                var account = await context.Accounts.FindAsync(id);
+                
+                if (account == null)
+                {
+                    return NotFound(new ApiResponse<object>
+                    {
+                        Success = false,
+                        Message = "Account not found"
+                    });
+                }
+
+                context.Accounts.Remove(account);
+                await context.SaveChangesAsync();
+
+                return Ok(new ApiResponse<object>
+                {
+                    Success = true,
+                    Message = "Account deleted successfully",
+                    Data = null
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Failed to delete account",
+                    Errors = new List<string> { ex.Message }
+                });
+            }
+        }
 
         private static AccountResponse MapToResponse(Account account)
         {

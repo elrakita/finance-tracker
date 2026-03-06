@@ -1,8 +1,9 @@
 <div class="account-list-container">
   <div class="header-section">
     <h2>My Accounts</h2>
-    <button class="create-account-btn" (click)="onCreate()">
-      + Create New Account
+    <button class="btn btn-primary" (click)="onCreate()">
+      <span class="btn-icon">➕</span>
+        Create New Account
     </button>
   </div>
 
@@ -33,7 +34,7 @@
               <button class="ellipsis-btn">⋮</button>
                 <div class="action-buttons">
                   <button class="edit-btn" (click)="onEdit(account)">Edit</button>
-                  <button class="delete-btn">Delete</button>
+                  <button class="delete-btn" (click)="onDelete(account)">Delete</button>
               </div>
             </div> 
             <h3>{{ account.name }}</h3>
