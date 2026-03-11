@@ -3,12 +3,12 @@ using FinanceTracker.Api.Data;
 using FinanceTracker.Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;            
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -49,8 +49,18 @@ builder.Services.AddAuthentication(options => {
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.UseRouting();
 
 if (app.Environment.IsDevelopment())
 {
@@ -62,7 +72,7 @@ app.UseCors("AllowAngular");
 
 // Remove HTTPS redirection for development
 // app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

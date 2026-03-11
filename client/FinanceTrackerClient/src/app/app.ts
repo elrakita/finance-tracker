@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router'; 
+import { Component} from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router'; 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true, // Ensure this is present
   imports: [
     RouterOutlet, 
-    RouterLink,       // Required for routerLink="/login"
     MatToolbarModule, // Fixes mat-toolbar error
     MatButtonModule   // Fixes mat-button error
   ],
@@ -16,6 +15,10 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './app.scss'
 })
 export class App {
+  constructor(
+    protected route: Router
+  ) { }
+
   protected title = 'FinanceTrackerClient';
 
   get isLoggedIn(): boolean {
@@ -24,5 +27,6 @@ export class App {
 
   onLogout() {
     localStorage.removeItem('auth-token');
+    this.route.navigate(['/login']);
   }
 }
