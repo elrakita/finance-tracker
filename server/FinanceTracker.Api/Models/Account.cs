@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinanceTracker.Api.Models
 {
@@ -18,6 +19,10 @@ namespace FinanceTracker.Api.Models
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
+        public string UserId { get; set; } = string.Empty;
+        [ForeignKey("UserId")]
+        public virtual ApplicationUser? User { get; set; }
     }
 
     public enum AccountType

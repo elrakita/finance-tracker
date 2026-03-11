@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using FinanceTracker.Api.Data;
 using FinanceTracker.Api.Models;
 using FinanceTracker.Api.DTOs;
+using System.Security.Claims;
 
 namespace FinanceTracker.Api.Controllers
 {
@@ -21,9 +22,16 @@ namespace FinanceTracker.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<AccountResponse>>>> GetAccounts()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 var accounts = await context.Accounts
+                    .Where(a => a.UserId == userId)
                     .OrderBy(a => a.Type)
                     .ThenBy(a => a.Name)
                     .ToListAsync();
@@ -88,12 +96,19 @@ namespace FinanceTracker.Api.Controllers
         public async Task<ActionResult<ApiResponse<AccountResponse>>> PostAccount([FromBody] CreateAccountRequest request)
         {
             if (!ModelState.IsValid) return ValidationBadRequest();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
 
             try
             {
                 // Check if account name already exists
                 var existingAccount = await context.Accounts
-                    .FirstOrDefaultAsync(a => a.Name.ToLower() == request.Name.ToLower());
+                    .FirstOrDefaultAsync(a => 
+                        a.UserId == userId 
+                        && a.Name.ToLower() == request.Name.ToLower());
 
                 if (existingAccount != null)
                 {
@@ -112,6 +127,7 @@ namespace FinanceTracker.Api.Controllers
                     Name = request.Name.Trim(),
                     Type = request.Type,
                     Balance = request.Balance,
+                    UserId = userId,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
