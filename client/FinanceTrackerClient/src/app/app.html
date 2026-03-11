@@ -1,1 +1,16 @@
-<router-outlet />
+@if (isLoggedIn) {
+  <header class="main-nav">
+    <div class="nav-content">
+      <span class="brand">FinanceTracker</span>
+      
+      <div class="nav-actions">
+        <button class="login-btn" routerLink="/login">Log In</button>
+        <button class="register-btn" routerLink="/register">Register</button>
+      </div>
+    </div>
+  </header>
+}
+
+<main>
+  <router-outlet />
+</main>

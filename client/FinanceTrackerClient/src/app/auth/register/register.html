@@ -1,0 +1,90 @@
+<div class="auth-page-wrapper">
+  <div class="form-card">
+    <div class="card-header">
+      <h2>Create Account</h2>
+      <p>Join FinanceTracker to start managing your money</p>
+    </div>
+
+    <div class="card-content">
+      <!-- Error Message Area -->
+      @if (errorMessage) {
+        <div class="error-message">
+          <div class="alert error">
+            <div class="alert-icon">❌</div>
+            <div class="alert-content">
+              <span class="alert-title">Registration Failed</span>
+              <p>{{ errorMessage }}</p>
+            </div>
+          </div>
+        </div>
+      }
+
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        
+        <!-- Username Field -->
+        <div class="form-group">
+          <label for="username" class="form-label">
+            <span class="label-icon">👤</span> Username *
+          </label>
+          <div class="input-wrapper">
+            <input type="text" id="username" class="form-input" formControlName="username" 
+                   placeholder="johndoe123" [class.error]="isInvalid('username')">
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <span class="label-icon">📧</span> Email Address *
+          </label>
+          <div class="input-wrapper">
+            <input type="email" id="email" class="form-input" formControlName="email" 
+                   placeholder="your@email.com" [class.error]="isInvalid('email')">
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password" class="form-label">
+            <span class="label-icon">🔒</span> Password *
+          </label>
+          <div class="input-wrapper">
+            <input type="password" id="password" class="form-input" formControlName="password" 
+                   placeholder="••••••••" [class.error]="isInvalid('password')">
+          </div>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">
+            <span class="label-icon">✔️</span> Confirm Password *
+          </label>
+          <div class="input-wrapper">
+            <input type="password" id="confirmPassword" class="form-input" formControlName="confirmPassword" 
+                   placeholder="••••••••" [class.error]="isInvalid('confirmPassword') || registerForm.errors?.['mismatch']">
+          </div>
+          @if (registerForm.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched) {
+            <div class="error-text" style="color: #ff6b6b; font-size: 0.8rem; margin-top: 0.5rem;">
+              ⚠️ Passwords do not match
+            </div>
+          }
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading || registerForm.invalid">
+            <span class="btn-icon">{{ isLoading ? '⏳' : '✨' }}</span>
+            <span>{{ isLoading ? 'Creating Account...' : 'Register' }}</span>
+          </button>
+        </div>
+
+        <!-- Footer Link -->
+        <div class="auth-footer">
+          <span>Already have an account? </span>
+          <a routerLink="/login">Log in here</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

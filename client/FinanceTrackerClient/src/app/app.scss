@@ -1,0 +1,64 @@
+.main-nav {
+  background: rgba(250, 248, 240, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  .nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .brand {
+    font-family: 'Inter', sans-serif;
+    color: #5d4e37;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    button {
+      font-size: 0.9rem;
+    }
+  }
+
+  .login-btn {
+    background: none;
+    border: none;
+    color: #8b7355;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.2s;
+
+    &:hover { color: #5d4e37; }
+  }
+
+  .register-btn {
+    background: #deb887;
+    color: #5d4e37;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 8px rgba(93, 78, 55, 0.1);
+    transition: all 0.2s;
+
+    &:hover {
+      background: #d2b48c;
+      transform: translateY(-1px);
+    }
+  }
+}
