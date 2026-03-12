@@ -26,13 +26,6 @@ export interface CreateAccountRequest extends AccountRequest {
 export interface UpdateAccountRequest extends AccountRequest {
 }
 
-export interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data?: T;
-  errors: string[];
-}
-
 export const ACCOUNT_TYPE_OPTIONS = [
   { value: AccountType.Checking, label: 'Checking' },
   { value: AccountType.Savings, label: 'Savings' },

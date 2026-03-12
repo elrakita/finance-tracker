@@ -35,11 +35,16 @@
                 <div class="action-buttons">
                   <button class="edit-btn" (click)="onEdit(account)">Edit</button>
                   <button class="delete-btn" (click)="onDelete(account)">Delete</button>
-              </div>
+                </div>
             </div> 
             <h3>{{ account.name }}</h3>
             <p class="account-type">{{ getAccountTypeName(account.type) }}</p>
-            <p class="account-balance">${{ account.balance | number:'1.2-2' }}</p>
+            <div class="balance-row">
+              <p class="account-balance">${{ account.balance | number:'1.2-2' }}</p>
+              <button class="add-transaction-btn" (click)="onAddTransaction(account)" title="Add Transaction">
+                <span>+</span>
+              </button>
+            </div>
             <p class="account-date">Created: {{ account.createdAt | date:'short' }}</p>
           </div>
         }

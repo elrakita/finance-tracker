@@ -6,6 +6,7 @@ import { AccountService } from '../../services/account.service';
 import { Account, AccountType } from '../../models/account';
 import { AccountFormComponent } from '../account-form/account-form';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
+import { TransactionFormComponent } from '../transaction-form/transaction-form';
 
 
 @Component({
@@ -105,6 +106,19 @@ export class AccountListComponent implements OnInit {
             console.error('Delete failed', err);
           }
         });
+      }
+    });
+  }
+
+  onAddTransaction(account: any) {
+    const dialogRef = this.dialog.open(TransactionFormComponent, {
+      width: '600px',
+      data: {account: account}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadAccounts();
       }
     });
   }

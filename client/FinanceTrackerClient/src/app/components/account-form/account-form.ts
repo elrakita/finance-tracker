@@ -4,15 +4,15 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AccountService } from '../../services/account.service';
-import { Account, CreateAccountRequest, AccountType, ACCOUNT_TYPE_OPTIONS, ApiResponse } from '../../models/account';
+import { Account, ACCOUNT_TYPE_OPTIONS } from '../../models/account';
+import { ApiResponse } from '../../models/api-response';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-account-edit',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule],
-  templateUrl: './account-form.html',
-  styleUrl: './account-form.scss'
+  templateUrl: './account-form.html'
 })
 export class AccountFormComponent {
   accountForm: FormGroup;
