@@ -23,26 +23,32 @@ namespace FinanceTracker.Api.Controllers
         public async Task<ActionResult<ApiResponse<List<AccountResponse>>>> GetAccounts()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
             try
             {
                 var accounts = await context.Accounts
                     .Where(a => a.UserId == userId)
+                    .Select(a => new AccountResponse
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Type = a.Type,
+                        Balance = context.Transactions
+                            .Where(t => t.AccountId == a.Id)
+                            .Sum(t => t.Type == TransactionType.Income ? t.Amount : -t.Amount),
+                        CreatedAt = a.CreatedAt,
+                        UpdatedAt = a.UpdatedAt
+                    })
                     .OrderBy(a => a.Type)
                     .ThenBy(a => a.Name)
                     .ToListAsync();
-
-                var accountResponses = accounts.Select(MapToResponse).ToList();
 
                 return Ok(new ApiResponse<List<AccountResponse>>
                 {
                     Success = true,
                     Message = "Accounts retrieved successfully",
-                    Data = accountResponses
+                    Data = accounts
                 });
             }
             catch (Exception ex)
@@ -95,32 +101,26 @@ namespace FinanceTracker.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<AccountResponse>>> PostAccount([FromBody] CreateAccountRequest request)
         {
+            const decimal Epsilon = 0.00000001m;
+
             if (!ModelState.IsValid) return ValidationBadRequest();
+            
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            using var transactionScope = await context.Database.BeginTransactionAsync();
 
             try
             {
-                // Check if account name already exists
-                var existingAccount = await context.Accounts
-                    .FirstOrDefaultAsync(a => 
-                        a.UserId == userId 
-                        && a.Name.ToLower() == request.Name.ToLower());
-
-                if (existingAccount != null)
+                var nameLower = request.Name.ToLower();
+                if (await context.Accounts.AnyAsync(a => a.UserId == userId && a.Name.ToLower() == nameLower))
                 {
-                    return BadRequest(new ApiResponse<AccountResponse>
-                    {
+                    return BadRequest(new ApiResponse<AccountResponse> {
                         Success = false,
-                        Message = "Account with this name already exists",
-                        Errors = new List<string> { "Account name must be unique" }
+                        Message = "Account name must be unique"
                     });
                 }
 
-                // Create new account
                 var account = new Account
                 {
                     Id = Guid.NewGuid(),
@@ -131,25 +131,39 @@ namespace FinanceTracker.Api.Controllers
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
-
                 context.Accounts.Add(account);
-                await context.SaveChangesAsync();
 
-                var response = new ApiResponse<AccountResponse>
+                if (Math.Abs(request.Balance) > Epsilon)
+                {
+                    var initialTx = new Transaction
+                    {
+                        Id = Guid.NewGuid(),
+                        AccountId = account.Id,
+                        UserId = userId,
+                        Amount = Math.Abs(request.Balance),
+                        Type = request.Balance > Epsilon ? TransactionType.Income : TransactionType.Expense,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    };
+                    context.Transactions.Add(initialTx);
+                }
+
+                await context.SaveChangesAsync();
+                await transactionScope.CommitAsync();
+
+                return CreatedAtAction(nameof(GetAccount), new { id = account.Id }, new ApiResponse<AccountResponse>
                 {
                     Success = true,
-                    Message = "Account created successfully",
+                    Message = "Account and initial transaction created",
                     Data = MapToResponse(account)
-                };
-
-                return CreatedAtAction(nameof(GetAccount), new { id = account.Id }, response);
+                });
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse<AccountResponse>
-                {
+                await transactionScope.RollbackAsync();
+                return BadRequest(new ApiResponse<AccountResponse> {
                     Success = false,
-                    Message = "Failed to create account",
+                    Message = "Transaction failed",
                     Errors = new List<string> { ex.Message }
                 });
             }
