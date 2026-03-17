@@ -1,15 +1,19 @@
 import { Component} from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router'; 
+import { RouterOutlet, Router, RouterLink, RouterLinkActive } from '@angular/router'; 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu'; 
 
 @Component({
   selector: 'app-root',
-  standalone: true, // Ensure this is present
+  standalone: true,
   imports: [
     RouterOutlet, 
-    MatToolbarModule, // Fixes mat-toolbar error
-    MatButtonModule   // Fixes mat-button error
+    RouterLink,
+    RouterLinkActive,
+    MatToolbarModule,
+    MatButtonModule,
+    MatMenuModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'

@@ -1,13 +1,30 @@
 @if (isLoggedIn) {
   <header class="main-nav">
     <div class="nav-content">
-      <span class="brand">FinanceTracker</span>
-      
+      <div class="nav-left">
+        <span class="brand" routerLink="/accounts">FinanceTracker</span>
+      </div>
+
       <div class="nav-actions">
-        <button class="login-btn" (click)="onLogout()">Log Out</button>
+        <button class="settings-btn" [matMenuTriggerFor]="settingsMenu">
+          <span class="btn-icon">⚙️</span>
+          Settings
+        </button>
+
+        <button class="settings-btn" (click)="onLogout()">
+          <span class="btn-icon">🚪</span>
+          Log Out
+        </button>
       </div>
     </div>
   </header>
+
+  <mat-menu #settingsMenu="matMenu" class="beige-settings-menu">
+    <button mat-menu-item routerLink="/categories">
+      <span class="menu-icon">🏷️</span>
+      <span class="menu-item">Manage Categories</span>
+    </button>
+  </mat-menu>
 }
 
 <main>
