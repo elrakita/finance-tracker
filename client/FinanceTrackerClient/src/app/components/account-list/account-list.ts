@@ -25,6 +25,7 @@ export class AccountListComponent implements OnInit {
   accounts: Account[] = [];
   loading = false;
   error: string | null = null;
+  transactionsError: string | null = null;
   private dialog = inject(MatDialog);
 
   selectedAccount: Account | null = null;
@@ -150,9 +151,9 @@ export class AccountListComponent implements OnInit {
 
   loadTransactions(accountId: string) {
     this.transactionsLoading = true;
-    this.error = null;
+    this.transactionsError = null;
 
-    this.transactionService.getTransactionsByAccount(accountId, this.currentPage, 20)
+    this.transactionService.getTransactionsByAccount(accountId, this.currentPage, 10)
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -160,12 +161,12 @@ export class AccountListComponent implements OnInit {
             this.totalTransactions = response.total || response.data.length;
             this.transactionsLoading = false;
           } else {
-            this.error = response.message || 'Failed to load transactions';
+            this.transactionsError = response.message || 'Failed to load transactions';
             this.transactionsLoading = false;
           }
         },
         error: (err) => {
-          this.error = 'An error occurred while fetching history';
+          this.transactionsError = 'An error occurred while fetching history';
           this.transactionsLoading = false;
           console.error('Transaction API Error:', err);
         }

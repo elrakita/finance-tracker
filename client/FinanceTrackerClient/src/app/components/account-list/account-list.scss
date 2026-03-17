@@ -36,17 +36,6 @@
     }
   }
 
-  .error {
-    background: rgba(184, 92, 92, 0.9);
-    color: #f5f5dc;
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: 500;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(139, 115, 85, 0.2);
-  }
-
   .no-accounts {
     background: rgba(245, 245, 220, 0.8);
     color: #5d4e37;
@@ -419,11 +408,13 @@ mat-drawer-content {
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  /*.account-type {
+    margin-bottom: 0;
+  }*/
 }
 
 .drawer-header {
-  margin-bottom: 2rem;
-
   .header-main {
     display: flex;
     justify-content: space-between;
@@ -454,7 +445,6 @@ mat-drawer-content {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 8px;
-  margin-top: 1rem;
 
   th {
     text-align: left;
@@ -539,6 +529,17 @@ mat-drawer-content {
     content: '💳';
     margin-right: 0.5rem;
   }
+}
+
+.error {
+  background: rgba(184, 92, 92, 0.9);
+  color: #f5f5dc;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 115, 85, 0.2);
 }
 
 @media (max-width: 768px) {

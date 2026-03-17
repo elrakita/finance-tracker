@@ -16,10 +16,14 @@
       <div class="transactions-section">
         @if (transactionsLoading) {
           <div class="loading">Fetching transactions...</div>
-        } @else {
-          @if (transactions.length === 0) {
-            <div class="no-transactions">No transactions found for this account.</div>
-          } @else {
+        }
+        @else if (transactionsError) {
+          <div class="error">{{ transactionsError }}</div>
+        }
+        @else if (transactions.length === 0) {
+          <div class="no-transactions">No transactions found for this account.</div>
+        }
+        <div [hidden]="transactions.length === 0 || transactionsError">
             <table class="transactions-table">
               <thead>
                 <tr>
@@ -52,14 +56,13 @@
             <div class="paginator-container">
               <mat-paginator 
                 [length]="totalTransactions"
-                [pageSize]="20"
+                [pageSize]="10"
                 [hidePageSize]="true"
                 (page)="onPageChange($event)"
                 aria-label="Select page">
               </mat-paginator>
             </div>
-          }
-        }
+          </div>
       </div>
     </div>
   </mat-drawer>

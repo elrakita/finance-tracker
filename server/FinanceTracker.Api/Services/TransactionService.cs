@@ -15,31 +15,30 @@ namespace FinanceTracker.Api.Services
             _context = context;
         }
 
-        public async Task<ApiPaginatedResponse<TransactionResponse>> GetAccountTransactionsAsync(string accountId, string userId, int page, int limit)
+        public async Task<ApiPaginatedResponse<TransactionResponse>> GetAccountTransactionsAsync(
+            string accountId, string userId, int page, int limit)
         {
             var accountGuid = Guid.Parse(accountId);
 
-            var query = _context.Transactions
-                .Where(t => t.AccountId == accountGuid && t.UserId == userId);
+            var totalCount = await _context.Transactions
+                .Where(t => t.AccountId == accountGuid && t.UserId == userId)
+                .CountAsync();
 
-            var totalCount = await query.CountAsync();
+            var query = _context.Database.SqlQuery<TransactionResponse>($"""
+                SELECT 
+                    t."Id",
+                    t."Type",
+                    t."Amount",
+                    t."AccountId",
+                    t."CreatedAt",
+                    t."UpdatedAt",
+                    SUM(CASE WHEN t."Type" = {(int)TransactionType.Income} THEN t."Amount" ELSE -t."Amount" END) 
+                        OVER (ORDER BY t."CreatedAt" ASC, t."Id" ASC) AS "BalanceAfter"
+                FROM "Transactions" as t
+                WHERE t."AccountId" = {accountGuid} AND t."UserId" = {userId}
+                """);
 
             var transactions = await query
-                .OrderBy(t => t.CreatedAt)
-                .ThenBy(t => t.Id)
-                .Select(t => new TransactionResponse
-                {
-                    Id = t.Id,
-                    Type = t.Type,
-                    Amount = t.Amount,
-                    AccountId = t.AccountId,
-                    CreatedAt = t.CreatedAt,
-                    UpdatedAt = t.UpdatedAt,
-                    BalanceAfter = _context.Transactions
-                        .Where(inner => inner.AccountId == t.AccountId && 
-                                       (inner.CreatedAt < t.CreatedAt || (inner.CreatedAt == t.CreatedAt && inner.Id <= t.Id)))
-                        .Sum(inner => inner.Type == TransactionType.Income ? inner.Amount : -inner.Amount)
-                })
                 .OrderByDescending(t => t.CreatedAt)
                 .ThenByDescending(t => t.Id)
                 .Skip(page * limit)
@@ -53,7 +52,7 @@ namespace FinanceTracker.Api.Services
                 Total = totalCount,
                 Message = "Transactions retrieved successfully"
             };
-        }
+    }
 
         public async Task<ApiResponse<TransactionResponse>> CreateTransactionAsync(CreateTransactionRequest request, string userId)
         {
