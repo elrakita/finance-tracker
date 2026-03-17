@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using FinanceTracker.Api.Data;
 using FinanceTracker.Api.Models;
 using FinanceTracker.Api.DTOs;
+using FinanceTracker.Api.Interfaces;
 using System.Security.Claims;
 
 namespace FinanceTracker.Api.Controllers
@@ -11,98 +12,42 @@ namespace FinanceTracker.Api.Controllers
     [Route("api/[controller]")]
     public class TransactionsController : ControllerBase
     {
-        private readonly FinanceContext _context;
+        private readonly ITransactionService _transactionService;
 
-        public TransactionsController(FinanceContext context)
+        public TransactionsController(ITransactionService transactionService)
         {
-            _context = context;
+            _transactionService = transactionService;
         }
 
-        // POST: api/transactions
         [HttpPost]
         public async Task<ActionResult<ApiResponse<TransactionResponse>>> PostTransaction([FromBody] CreateTransactionRequest request)
         {
-            if (!ModelState.IsValid) return BadRequest(new ApiResponse<TransactionResponse> { Success = false, Message = "Invalid data" });
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
-            try
-            {
-                // Verify account exists and belongs to user before creating transaction
-                var accountExists = await _context.Accounts
-                    .AnyAsync(a => a.Id == request.AccountId && a.UserId == userId);
-
-                if (!accountExists)
-                {
-                    return NotFound(new ApiResponse<TransactionResponse> { Success = false, Message = "Account not found or access denied" });
-                }
-
-                var transaction = new Transaction
-                {
-                    Id = Guid.NewGuid(),
-                    Type = request.Type,
-                    Amount = request.Amount,
-                    AccountId = request.AccountId,
-                    UserId = userId,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                };
-
-                _context.Transactions.Add(transaction);
-                await _context.SaveChangesAsync();
-
-                return Ok(new ApiResponse<TransactionResponse>
-                {
-                    Success = true,
-                    Message = "Transaction created successfully",
-                    Data = MapToResponse(transaction)
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ApiResponse<TransactionResponse> { Success = false, Message = "Failed to create transaction", Errors = new() { ex.Message } });
-            }
+            var result = await _transactionService.CreateTransactionAsync(request, userId);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        // GET: api/transactions/account/{accountId}
         [HttpGet("account/{accountId}")]
-        public async Task<ActionResult<ApiResponse<List<TransactionResponse>>>> GetAccountTransactions(string accountId)
+        public async Task<ActionResult<ApiPaginatedResponse<TransactionResponse>>> GetAccountTransactions(
+            string accountId, 
+            [FromQuery] int page = 0, 
+            [FromQuery] int limit = 20)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
             try
             {
-                var transactions = await _context.Transactions
-                    .Where(t => t.AccountId.ToString() == accountId && t.UserId == userId)
-                    .OrderByDescending(t => t.CreatedAt)
-                    .ToListAsync();
-
-                return Ok(new ApiResponse<List<TransactionResponse>>
-                {
-                    Success = true,
-                    Message = "Transactions retrieved successfully",
-                    Data = transactions.Select(MapToResponse).ToList()
-                });
+                var result = await _transactionService.GetAccountTransactionsAsync(accountId, userId, page, limit);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse<List<TransactionResponse>> { Success = false, Message = "Failed to load transactions", Errors = new() { ex.Message } });
+                return BadRequest(new ApiResponse<string> { Success = false, Message = ex.Message });
             }
-        }
-
-        private TransactionResponse MapToResponse(Transaction t)
-        {
-            return new TransactionResponse
-            {
-                Id = t.Id,
-                Type = t.Type,
-                Amount = t.Amount,
-                AccountId = t.AccountId,
-                CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt
-            };
         }
     }
+
 }

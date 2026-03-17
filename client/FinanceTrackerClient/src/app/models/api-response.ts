@@ -4,3 +4,9 @@ export interface ApiResponse<T> {
   data?: T;
   errors: string[];
 }
+
+export interface ApiPaginatedResponse<T> extends ApiResponse<T[]> {
+  total: number;
+  page: number;
+  pageSize: number;
+}

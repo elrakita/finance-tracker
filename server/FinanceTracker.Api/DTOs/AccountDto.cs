@@ -42,4 +42,9 @@ namespace FinanceTracker.Api.DTOs
         public T? Data { get; set; }
         public List<string> Errors { get; set; } = new();
     }
+
+    public class ApiPaginatedResponse<T> : ApiResponse<List<T>>
+    {
+        public int Total { get; set; }
+    }
 }

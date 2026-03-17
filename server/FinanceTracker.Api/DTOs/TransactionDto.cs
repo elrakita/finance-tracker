@@ -22,6 +22,7 @@ namespace FinanceTracker.Api.DTOs
         public TransactionType Type { get; set; }
         public string TypeDisplay => Type.ToString();
         public decimal Amount { get; set; }
+        public decimal BalanceAfter { get; set; }
         public Guid AccountId { get; set; } = Guid.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using FinanceTracker.Api.Data;
 using FinanceTracker.Api.Models;
+using FinanceTracker.Api.Interfaces;
+using FinanceTracker.Api.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -57,6 +59,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 var app = builder.Build();
 

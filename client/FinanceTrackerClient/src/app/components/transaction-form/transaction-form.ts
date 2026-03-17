@@ -30,7 +30,7 @@ export class TransactionFormComponent {
     const formData : any = {
       type: ['', [Validators.required]],
       amount: [0, [Validators.required, Validators.min(-999999.99), Validators.max(999999.99)]],
-      accountId: [this.data.account?.id]
+      accountId: [this.data.accountId]
     }
     this.transactionForm = this.fb.group(formData);
   }

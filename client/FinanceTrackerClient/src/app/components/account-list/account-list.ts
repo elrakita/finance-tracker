@@ -2,7 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { AccountService } from '../../services/account.service';
+import { TransactionService } from '../../services/transaction.service';
 import { Account, AccountType } from '../../models/account';
 import { AccountFormComponent } from '../account-form/account-form';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
@@ -12,7 +15,9 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form';
 @Component({
   selector: 'app-account-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,
+    MatSidenavModule,
+    MatPaginatorModule],
   templateUrl: './account-list.html',
   styleUrl: './account-list.scss'
 })
@@ -20,9 +25,17 @@ export class AccountListComponent implements OnInit {
   accounts: Account[] = [];
   loading = false;
   error: string | null = null;
-  private dialog = inject(MatDialog); 
+  private dialog = inject(MatDialog);
 
-  constructor(private accountService: AccountService, private router: Router) { }
+  selectedAccount: Account | null = null;
+  transactions: any[] = [];
+  transactionsLoading = false;
+  totalTransactions = 0;
+  currentPage = 0;
+
+  constructor(private accountService: AccountService, 
+    private transactionService: TransactionService) 
+  { }
 
   ngOnInit(): void {
     this.loadAccounts();
@@ -110,17 +123,67 @@ export class AccountListComponent implements OnInit {
     });
   }
 
-  onAddTransaction(account: any) {
-    const dialogRef = this.dialog.open(TransactionFormComponent, {
+
+  onAddTransaction(account: Account) {
+     const dialogRef = this.dialog.open(TransactionFormComponent, {
       width: '600px',
-      data: {account: account}
+      data: { accountId: account.id }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadAccounts();
+        if (this.selectedAccount?.id === account.id) {
+          this.loadTransactions(account.id);
+        }
       }
     });
   }
+
+  onViewTransactions(account: Account, drawer: any) {
+    this.selectedAccount = account;
+    this.transactions = [];
+    this.currentPage = 0;
+    this.loadTransactions(account.id);
+    drawer.open();
+  }
+
+  loadTransactions(accountId: string) {
+    this.transactionsLoading = true;
+    this.error = null;
+
+    this.transactionService.getTransactionsByAccount(accountId, this.currentPage, 20)
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            this.transactions = response.data;
+            this.totalTransactions = response.total || response.data.length;
+            this.transactionsLoading = false;
+          } else {
+            this.error = response.message || 'Failed to load transactions';
+            this.transactionsLoading = false;
+          }
+        },
+        error: (err) => {
+          this.error = 'An error occurred while fetching history';
+          this.transactionsLoading = false;
+          console.error('Transaction API Error:', err);
+        }
+      });
+  }
+
+
+  onPageChange(event: any) {
+    this.currentPage = event.pageIndex;
+    if (this.selectedAccount) {
+      this.loadTransactions(this.selectedAccount.id);
+    }
+  }
+
+  onDeleteTransaction(transaction: any) {
+    // Implement delete logic here
+    console.log('Delete transaction:', transaction.id);
+  }
+
 
 }

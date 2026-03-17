@@ -4,7 +4,7 @@
   margin: 0 auto;
   background: linear-gradient(135deg, #f7f3e9 0%, #e8dcc6 50%, #d4c4a8 100%);
   min-height: 100vh;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
 
   h2 {
     color: #5d4e37;
@@ -67,6 +67,7 @@
     margin-top: 1rem;
 
     .account-card {
+      cursor: pointer;
       background: rgba(250, 248, 240, 0.95);
       border-radius: 20px;
       padding: 2rem;
@@ -78,6 +79,7 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
+      user-select: none; 
 
       &::before {
         content: '';
@@ -90,11 +92,12 @@
       }
 
       &:hover {
-        transform: translateY(-8px);
+        transform: translateY(-8px) scale(1.02);;
         box-shadow:
           0 20px 40px rgba(93, 78, 55, 0.2),
           0 8px 16px rgba(139, 115, 85, 0.15);
         background: rgba(255, 253, 248, 0.98);
+        border-color: #d2b48c;
       }
 
       h3 {
@@ -109,26 +112,6 @@
           content: '👤';
           margin-right: 0.75rem;
           font-size: 1.2rem;
-        }
-      }
-
-      .account-type {
-        display: inline-flex;
-        align-items: center;
-        background: linear-gradient(135deg, #d2b48c, #deb887);
-        color: #5d4e37;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.875rem;
-        font-weight: 600;
-        margin: 0.5rem 0 1rem 0;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        box-shadow: 0 2px 8px rgba(93, 78, 55, 0.2);
-
-        &::before {
-          content: '💳';
-          margin-right: 0.5rem;
         }
       }
 
@@ -315,7 +298,7 @@
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -327,6 +310,15 @@
     box-shadow: 0 4px 12px rgba(139, 115, 85, 0.4);
   }
 }
+
+.btn-primary, .create-account-btn {
+  font-family: inherit;
+  
+  span {
+    font-family: inherit;
+  }
+}
+
 
 .balance-row {
   display: flex;
@@ -367,6 +359,190 @@
   }
 }
 
+.add-transaction-btn, .edit-btn, .delete-btn {
+  cursor: pointer;
+}
+
 .account-card {
   padding-bottom: 2rem;
+}
+
+.dashboard-wrapper {
+  display: block;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background: transparent; 
+  overflow-x: hidden !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+mat-drawer-content {
+  overflow-x: hidden !important;
+  display: block;
+  position: relative;
+}
+
+.transactions-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  z-index: 1000;
+  width: 550px; 
+  background: rgba(250, 248, 240, 0.98); 
+  backdrop-filter: blur(15px);
+  border-left: 1px solid rgba(139, 115, 85, 0.2);
+  box-shadow: -10px 0 30px rgba(93, 78, 55, 0.15);
+  padding-top: 40px;
+  color: #5d4e37;
+
+  .no-transactions, .loading {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #d2b48c, #deb887, #f4a460);
+    z-index: 10;
+  }
+}
+
+.drawer-content-wrapper {
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.drawer-header {
+  margin-bottom: 2rem;
+
+  .header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #5d4e37;
+      text-align: left;
+      text-shadow: none;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #8b7355;
+      cursor: pointer;
+      transition: color 0.2s;
+      &:hover { color: #5d4e37; }
+    }
+  }
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin-top: 1rem;
+
+  th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    color: #8b7355;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  td {
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid rgba(139, 115, 85, 0.1);
+    border-bottom: 1px solid rgba(139, 115, 85, 0.1);
+    color: #5d4e37;
+    font-size: 0.9rem;
+
+    &:first-child { 
+      border-left: 1px solid rgba(139, 115, 85, 0.1); 
+      border-radius: 12px 0 0 12px; 
+    }
+    &:last-child { 
+      border-right: 1px solid rgba(139, 115, 85, 0.1); 
+      border-radius: 0 12px 12px 0; 
+    }
+  }
+
+  .amount-income { color: #2d6a4f; font-weight: 700; }
+  .amount-expense { color: #b85c5c; font-weight: 700; }
+  .balance-cell { font-weight: 600; color: #8b6914; }
+}
+
+.delete-tx-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  opacity: 0.6;
+  transition: opacity 0.2s, transform 0.2s;
+  
+  &:hover {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.history-btn {
+  @extend .edit-btn;
+  background: #f4a460;
+  color: white;
+  &:hover { background: #e69345; }
+}
+
+.paginator-container {
+  margin-top: auto;
+  padding-top: 1rem;
+
+  ::ng-deep .mat-mdc-paginator {
+    background: transparent !important;
+    color: #5d4e37 !important;
+    font-family: inherit;
+  }
+}
+
+.account-type {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #d2b48c, #deb887);
+  color: #5d4e37;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0.5rem 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.2);
+
+  &::before {
+    content: '💳';
+    margin-right: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .transactions-drawer {
+    width: 100% !important;
+  }
 }
