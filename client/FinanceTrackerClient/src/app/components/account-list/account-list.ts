@@ -173,7 +173,6 @@ export class AccountListComponent implements OnInit {
       });
   }
 
-
   onPageChange(event: any) {
     this.currentPage = event.pageIndex;
     if (this.selectedAccount) {
@@ -185,6 +184,4 @@ export class AccountListComponent implements OnInit {
     // Implement delete logic here
     console.log('Delete transaction:', transaction.id);
   }
-
-
 }

@@ -330,6 +330,45 @@ form {
   }
 }
 
+.error {
+  background: rgba(184, 92, 92, 0.9);
+  color: #f5f5dc;
+  padding: 2rem 2.5rem;
+  margin: 2rem 0;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 115, 85, 0.2);
+}
+
+.create-btn {
+  background: linear-gradient(135deg, #A0956B, #8B7355);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1.15rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(139, 115, 85, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #8B7355, #6F5B43);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 115, 85, 0.4);
+  }
+}
+
+.btn-primary, .create-btn {
+  font-family: inherit;
+  
+  span {
+    font-family: inherit;
+  }
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

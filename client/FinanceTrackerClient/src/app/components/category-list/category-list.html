@@ -1,1 +1,53 @@
-<p>category-list works!</p>
+<div class="category-list-container">
+  <h2>Manage Categories</h2>
+
+  <div class="header-actions">
+    <button class="create-btn" (click)="onCreate()">
+        <span class="btn-icon">➕</span>
+        Create New Category
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="loading">Fetching categories...</div>
+  }
+
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+
+  <div class="categories-grid" @fadeIn>
+    @for (cat of categories; track cat.id) {
+      <div class="category-card">
+        <div class="card-accent" [style.background]="cat.color"></div>
+        
+        <div class="category-header-row">
+          <div class="category-icon-box" [style.background-color]="cat.color + '22'">
+            {{ cat.icon }}
+          </div>
+          <h3>{{ cat.name }}</h3>
+        </div>
+
+        <div class="category-meta">
+          @if (cat.isDefault) {
+            <span class="system-tag">🔒 System Default</span>
+          } @else {
+            <span class="user-tag">👤 Custom Category</span>
+          }
+        </div>
+
+        <div class="card-actions">
+          @if (!cat.isDefault) {
+            <button class="delete-btn" (click)="onDeleteCategory(cat.id)">🗑️</button>
+          }
+        </div>
+      </div>
+    } @empty {
+      @if (!loading && !error) {
+        <div class="no-categories">
+          <p>No categories found. Start by creating one!</p>
+        </div>
+      }
+    }
+  </div>
+</div>

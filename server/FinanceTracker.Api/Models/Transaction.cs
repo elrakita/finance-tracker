@@ -19,12 +19,16 @@ namespace FinanceTracker.Api.Models
 
         public Guid AccountId { get; set; } = Guid.Empty;
         public string UserId { get; set; } = string.Empty;
+        public Guid CategoryId { get; set; }
 
         [ForeignKey("AccountId")]
         public virtual Account? Account { get; set; }
 
         [ForeignKey("UserId")]
         public virtual ApplicationUser? User { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public virtual Category? Category { get; set; }
     }
 
     public enum TransactionType

@@ -17,9 +17,10 @@ export const routes: Routes = [
 
   { 
     path: 'categories', 
-    component: CategoryListComponent, // Create this component next
+    component: CategoryListComponent,
     canActivate: [authGuard]
   },
+
   { path: '', redirectTo: '/accounts', pathMatch: 'full' },
   { path: '**', redirectTo: '/accounts' }
 ];

@@ -2,9 +2,15 @@
   <header class="main-nav">
     <div class="nav-content">
       <div class="nav-left">
-        <span class="brand" routerLink="/accounts">FinanceTracker</span>
+        <div class="brand-wrapper" routerLink="/accounts">
+          <div class="brand-logo">
+            <span class="logo-inner">FT</span>
+          </div>
+          <span class="brand-text">
+            Finance<span class="text-highlight">Tracker</span>
+          </span>
+        </div>
       </div>
-
       <div class="nav-actions">
         <button class="settings-btn" [matMenuTriggerFor]="settingsMenu">
           <span class="btn-icon">⚙️</span>

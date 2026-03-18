@@ -11,6 +11,10 @@ namespace FinanceTracker.Api.Data
         {
         }
 
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -18,9 +22,42 @@ namespace FinanceTracker.Api.Data
             builder.Entity<ApplicationUser>().ToTable("Users");
             builder.Entity<IdentityRole>().ToTable("Roles");
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
-        }
 
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
+            builder.Entity<Category>().HasData(
+                new Category 
+                { 
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), 
+                    Name = "Food", 
+                    Icon = "🍔", 
+                    Color = "#FF5733", 
+                    IsDefault = true 
+                },
+                new Category 
+                { 
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), 
+                    Name = "Housing", 
+                    Icon = "🏠", 
+                    Color = "#3357FF", 
+                    IsDefault = true 
+                },
+                new Category 
+                { 
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), 
+                    Name = "Transportation", 
+                    Icon = "🚗", 
+                    Color = "#33FF57", 
+                    IsDefault = true 
+                },
+                new Category 
+                { 
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), 
+                    Name = "Salary", 
+                    Icon = "💰", 
+                    Color = "#2ECC71", 
+                    IsDefault = true 
+                }
+            );
+
+        }
     }
 }
