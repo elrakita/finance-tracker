@@ -1,3 +1,5 @@
+@use '../styles/form' as form;
+
 .auth-page-wrapper {
   display: grid;
   place-items: center;
@@ -43,8 +45,12 @@
     padding: 0
 }
 
-.card-content {
-    padding: 2rem;
+.card-content, .card-header {
+    padding: 1.5rem;
+
+    p {
+      padding-top: 0.7rem
+    }
 }
 
 html, body {

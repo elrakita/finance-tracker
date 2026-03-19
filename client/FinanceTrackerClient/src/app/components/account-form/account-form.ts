@@ -12,7 +12,8 @@ import { HttpErrorResponse } from '@angular/common/http';
   selector: 'app-account-edit',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule],
-  templateUrl: './account-form.html'
+  templateUrl: './account-form.html',
+  styleUrls: ['./account-form.scss']
 })
 export class AccountFormComponent {
   accountForm: FormGroup;

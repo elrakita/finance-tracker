@@ -1,62 +1,10 @@
-.account-list-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: linear-gradient(135deg, #f7f3e9 0%, #e8dcc6 50%, #d4c4a8 100%);
-  min-height: 100vh;
-  box-sizing: border-box;
+@use '../../styles/list' as list;
 
-  h2 {
-    color: #5d4e37;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    text-align: center;
-    text-shadow: 0 2px 4px rgba(93, 78, 55, 0.1);
-  }
-
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    color: #8b7355;
-    font-size: 1.2rem;
-    font-weight: 500;
-
-    &::after {
-      content: '';
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(139, 115, 85, 0.3);
-      border-top: 2px solid #8b7355;
-      border-radius: 50%;
-      margin-left: 1rem;
-      animation: spin 1s linear infinite;
-    }
-  }
-
-  .no-accounts {
-    background: rgba(245, 245, 220, 0.8);
-    color: #5d4e37;
-    padding: 3rem 2rem;
-    border-radius: 16px;
-    text-align: center;
-    font-size: 1.1rem;
-    font-weight: 500;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(139, 115, 85, 0.3);
-    box-shadow: 0 8px 32px rgba(93, 78, 55, 0.1);
-  }
-
-  .accounts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1rem;
-
-    .account-card {
+.item-list-container {
+  .items-grid {
+    .item-card {
       cursor: pointer;
+
       background: rgba(250, 248, 240, 0.95);
       border-radius: 20px;
       padding: 2rem;
@@ -173,7 +121,6 @@
           border: 1px solid rgba(139, 115, 85, 0.1);
         }
 
-        // Reveal buttons when hovering over the action container
         &:hover .action-buttons {
           opacity: 1;
           visibility: visible;
@@ -181,7 +128,6 @@
         }
       }
 
-      // Button specific styling
       .edit-btn, .delete-btn {
         padding: 0.4rem 0.8rem;
         border-radius: 8px;
@@ -262,7 +208,6 @@
   &:nth-child(4) { animation-delay: 0.4s; }
 }
 
-// Add some warm accent colors for different account types
 .account-card {
   &:nth-child(even) {
     &::before {
@@ -287,14 +232,14 @@
   align-items: center;
   
   .account-balance {
-    margin: 0; // Remove existing margin to align perfectly
+    margin: 0;
     flex-grow: 1;
   }
 
   .add-transaction-btn {
     width: 40px;
     height: 40px;
-    border-radius: 12px; // Matching your card-action button style
+    border-radius: 12px;
     background: linear-gradient(135deg, #8b6914, #b8860b);
     color: white;
     border: none;
@@ -335,7 +280,6 @@
   width: 100%;
   background: transparent; 
   overflow-x: hidden !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 mat-drawer-content {
