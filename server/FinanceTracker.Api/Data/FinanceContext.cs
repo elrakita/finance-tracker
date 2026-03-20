@@ -55,7 +55,15 @@ namespace FinanceTracker.Api.Data
                     Icon = "💰", 
                     Color = "#2ECC71", 
                     IsDefault = true 
-                }
+                },
+                new Category 
+                { 
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000005"), 
+                    Name = "Initial Balance", 
+                    Icon = "🏁", 
+                    Color = "#201c1c", 
+                    IsDefault = true 
+                 }
             );
 
         }

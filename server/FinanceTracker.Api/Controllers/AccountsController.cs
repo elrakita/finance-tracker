@@ -11,6 +11,7 @@ namespace FinanceTracker.Api.Controllers
     [Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {
+        private readonly Guid InitialBalanceCategoryId = Guid.Parse("00000000-0000-0000-0000-000000000005");
         private readonly FinanceContext context;
 
         public AccountsController(FinanceContext context)
@@ -143,7 +144,8 @@ namespace FinanceTracker.Api.Controllers
                         Amount = Math.Abs(request.Balance),
                         Type = request.Balance > Epsilon ? TransactionType.Income : TransactionType.Expense,
                         CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow
+                        UpdatedAt = DateTime.UtcNow,
+                        CategoryId = InitialBalanceCategoryId
                     };
                     context.Transactions.Add(initialTx);
                 }

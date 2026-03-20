@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanceTracker.Api.Migrations
 {
     [DbContext(typeof(FinanceContext))]
-    [Migration("20260318080821_AddCategories")]
-    partial class AddCategories
+    [Migration("20260320090944_AddInitialBalanceCategory")]
+    partial class AddInitialBalanceCategory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

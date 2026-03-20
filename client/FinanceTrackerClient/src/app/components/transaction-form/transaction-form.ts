@@ -10,7 +10,8 @@ import { CreateTransactionRequest, Transaction, TRANSACTION_TYPE_OPTIONS } from 
   selector: 'app-transaction-edit',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule],
-  templateUrl: './transaction-form.html'
+  templateUrl: './transaction-form.html',
+  styleUrls: ['./transaction-form.scss']
 })
 export class TransactionFormComponent {
   transactionForm: FormGroup;

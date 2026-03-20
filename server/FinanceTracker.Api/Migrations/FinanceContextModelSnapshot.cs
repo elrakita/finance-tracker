@@ -185,6 +185,14 @@ namespace FinanceTracker.Api.Migrations
                             Icon = "💰",
                             IsDefault = true,
                             Name = "Salary"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000005"),
+                            Color = "#201c1c",
+                            Icon = "🏁",
+                            IsDefault = true,
+                            Name = "Initial Balance"
                         });
                 });
 
