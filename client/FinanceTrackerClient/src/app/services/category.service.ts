@@ -16,4 +16,8 @@ export class CategoryService {
   getCategories() {
     return this.http.get<ApiResponse<Category[]>>(this.apiUrl);
   }
+
+  createCategory(category: CreateCategoryRequest) {
+    return this.http.post<ApiResponse<Category>>(this.apiUrl, category);
+  }
 }

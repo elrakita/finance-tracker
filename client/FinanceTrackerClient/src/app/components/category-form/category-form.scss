@@ -1,0 +1,147 @@
+@use '../../styles/form' as form;
+
+// --- 1. BASE COMPONENT LAYOUT ---
+:host {
+  display: block;
+  // If you fix the mixin in _form.scss, you can uncomment this:
+  // @include form.form-card;
+}
+
+h2 {
+  color: #5d4e37;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+// --- 2. THE COLOR PICKER CONTAINER ---
+.color-picker-container {
+  border: 1px solid rgba(139, 115, 85, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(255, 253, 248, 0.5);
+  margin-top: 0.5rem;
+  width: fit-content; // Important: Prevents the box from stretching to 100%
+  max-width: 100%;
+}
+
+.color-grid {
+  display: grid !important;
+  // Fixed 36px columns prevents the "huge" look
+  grid-template-columns: repeat(9, 32px); 
+  gap: 12px;
+  align-items: center;
+}
+
+// --- 3. THE SWATCHES (CIRCLES) ---
+.color-swatch {
+  width: 36px;
+  height: 36px;
+  aspect-ratio: 1;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+  background-clip: padding-box;
+
+  &:hover {
+    transform: scale(1.1);
+    z-index: 2;
+  }
+
+  &.active {
+    // Selection ring
+    outline: 2px solid #8b7355;
+    outline-offset: 2px;
+  }
+}
+
+.active-check {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+// --- 4. CUSTOM COLOR PICKER & GHOST INPUT FIX ---
+.custom-swatch-item {
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+
+.hidden-color-input {
+  // We keep it "near" but invisible to fix the top-left corner glitch
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.custom-swatch-label {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px dashed rgba(139, 115, 85, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(139, 115, 85, 0.1);
+    border-color: #8b7355;
+  }
+
+  // Ring for custom color when active
+  &.active-custom {
+     outline: 2px solid #8b7355;
+     outline-offset: 2px;
+     border-style: solid;
+     border-color: white;
+  }
+}
+
+.plus-icon {
+  color: #8b7355;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+// --- 5. SHARED FORM ELEMENTS ---
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #5d4e37;
+}
+
+.error-text {
+  color: #b85c5c;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 1.5rem 0;
+  margin-top: 1rem;
+  border-top: 1px solid rgba(139, 115, 85, 0.1);
+}
