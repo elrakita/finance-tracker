@@ -31,7 +31,6 @@ export class AccountFormComponent {
     private dialogRef: MatDialogRef<AccountFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    // Initializing the form with existing data
     this.isEditMode = !!(this.data && this.data.id);
     const formData : any = {
       name: [this.isEditMode ? data.name : '', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
@@ -95,24 +94,22 @@ export class AccountFormComponent {
         balance: parseFloat(this.accountForm.value.balance)
     };
 
-    // 1. Decide which request to send
     const request$ = this.isEditMode 
         ? this.accountService.updateAccount(this.data.id, formData) 
         : this.accountService.createAccount(formData);
 
-    // 2. Subscribe once to handle both
     request$.subscribe({
         next: (response: ApiResponse<Account>) => {
         this.isLoading = false;
         if (response.success) {
             this.success = true;
             this.successMessage = response.message;
-            setTimeout(() => this.dialogRef.close(true), 2000); // Close modal on success
+            setTimeout(() => this.dialogRef.close(true), 2000);
         } else {
             this.errorMessage = response.message;
         }
         },
-        error: (httpError: HttpErrorResponse) => { // Fixed with type!
+        error: (httpError: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorMessage = httpError.error?.message || 'A server error occurred.';
         console.error('API Error:', httpError);
