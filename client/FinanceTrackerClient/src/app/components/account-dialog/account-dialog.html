@@ -4,24 +4,32 @@
 
 <mat-dialog-content>
   @if (successMessage) {
-    <div class="alert success">
-      <div class="alert-icon">✅</div>
-      <div class="alert-content">
-        <span class="alert-title">Success!</span>
-        <p>{{ successMessage }}</p>
-        <small>{{ isEditMode ? 'Closing...' : 'Redirecting to accounts...' }}</small>
-      </div>
-    </div>
+    <mat-card class="alert-card success" appearance="filled">
+      <mat-card-content>
+        <div class="alert-container">
+          <mat-icon class="alert-icon">check_circle</mat-icon>
+          <div class="alert-content">
+            <span class="alert-title">Success!</span>
+            <p>{{ successMessage }}</p>
+            <small>{{ isEditMode ? 'Closing...' : 'Redirecting...' }}</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   }
 
   @if (errorMessage) {
-    <div class="alert error">
-      <div class="alert-icon">❌</div>
-      <div class="alert-content">
-        <span class="alert-title">Error</span>
-        <p>{{ errorMessage }}</p>
-      </div>
-    </div>
+    <mat-card class="alert-card error" appearance="filled">
+      <mat-card-content>
+        <div class="alert-container">
+          <mat-icon class="alert-icon">error</mat-icon>
+          <div class="alert-content">
+            <span class="alert-title">Error</span>
+            <p>{{ errorMessage }}</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   }
 
   @if (!successMessage) {
@@ -62,7 +70,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()" [disabled]="isLoading">
+  <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
+    <mat-icon>close</mat-icon>
     Cancel
   </button>
   
@@ -70,7 +79,9 @@
     mat-flat-button 
     color="primary" 
     (click)="onSubmit()" 
+    type="submit"
     [disabled]="isLoading || accountForm.invalid">
+    <mat-icon>check_circle</mat-icon>
     {{ isLoading ? 'Processing...' : (isEditMode ? 'Save Changes' : 'Create Account') }}
   </button>
 </mat-dialog-actions>

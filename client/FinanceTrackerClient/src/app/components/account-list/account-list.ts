@@ -1,13 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AccountService } from '../../services/account.service';
 import { TransactionService } from '../../services/transaction.service';
 import { Account, AccountType } from '../../models/account';
-import { AccountFormComponent } from '../account-form/account-form';
 import { AccountDialogComponent } from '../account-dialog/account-dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 import { TransactionFormComponent } from '../transaction-form/transaction-form';
@@ -68,19 +66,6 @@ export class AccountListComponent implements OnInit {
   }
 
   onCreate(): void {
-    const dialogRef = this.dialog.open(AccountFormComponent, {
-      width: '600px',
-      data: null
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadAccounts();
-      }
-    });
-  }
-
-  onCreate2(): void {
     const dialogRef = this.dialog.open(AccountDialogComponent, {
       panelClass: 'custom-dialog-container',
       width: '600px',
@@ -104,7 +89,7 @@ export class AccountListComponent implements OnInit {
   }
 
   onEdit(account: any) {
-    const dialogRef = this.dialog.open(AccountFormComponent, {
+    const dialogRef = this.dialog.open(AccountDialogComponent, {
       data: account,
       width: '600px'
     });

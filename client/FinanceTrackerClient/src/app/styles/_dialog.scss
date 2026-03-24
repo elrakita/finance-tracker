@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 form {
     padding-top: 20px;
 }
@@ -28,18 +30,15 @@ mat-form-field {
   }
 }
 
-button {
-  border-radius: 10px;
-}
-
-.alert {
-  padding: 1.25rem;
-  border-radius: 12px;
+.alert-card {
   margin-bottom: 1.5rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  backdrop-filter: blur(10px);
+  border-radius: var(--mat-sys-shape-corner-medium, 12px);
+
+  .alert-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 
   .alert-title {
     font-weight: 700;
@@ -48,17 +47,23 @@ button {
   }
 
   &.success {
-    background: rgba(139, 195, 74, 0.15);
-    border: 1px solid rgba(139, 195, 74, 0.3);
-    color: #5d4e37;
+    background-color: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+    border: 1px solid var(--mat-sys-primary);
+    
+    .alert-icon { color: var(--mat-sys-primary); }
   }
 
   &.error {
-    background: rgba(184, 92, 92, 0.15);
-    border: 1px solid rgba(184, 92, 92, 0.3);
-    color: #5d4e37;
+    background-color: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+    border: 1px solid var(--mat-sys-error);
+    
+    .alert-icon { color: var(--mat-sys-error); }
   }
 }
+
+
 
 @media (max-width: 600px) {
   [mat-dialog-title] {

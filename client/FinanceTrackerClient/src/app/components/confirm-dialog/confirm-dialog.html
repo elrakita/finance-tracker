@@ -1,23 +1,16 @@
-<div class="form-card">
-  <div class="card-header" mat-dialog-title>
-    <h3>{{ data.title }}</h3>
-  </div>
-  <div class="card-content">
-    <mat-dialog-content>
-      <div class="form-group">
-        <label for="name" class="form-label">{{ data.message }}</label>
-      </div>
-    </mat-dialog-content>
+<h2 mat-dialog-title>{{ data.title }}</h2>
 
-    <div class="form-actions" mat-dialog-actions align="end">
-      <button type="button" class="btn btn-secondary" (click)="onDismiss()">
-        <span class="btn-icon">❌</span>
-          Cancel
-      </button>
-      <button type="submit" class="btn btn-primary" (click)="onConfirm()">
-        <span class="btn-icon">☑️</span>
-          Confirm
-      </button> 
-    </div>
-  </div>
-</div>
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="onDismiss()">
+    <mat-icon>close</mat-icon>
+    Cancel
+  </button>
+  <button mat-flat-button color="primary" cdkFocusInitial (click)="onConfirm()">
+    <mat-icon>check_circle</mat-icon>
+    Confirm
+  </button>
+</mat-dialog-actions>
