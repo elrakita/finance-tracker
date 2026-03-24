@@ -14,6 +14,9 @@ namespace FinanceTracker.Api.DTOs
 
         [Required(ErrorMessage = "Account ID is required")]
         public Guid AccountId { get; set; } = Guid.Empty;
+
+        [Required(ErrorMessage = "Category is required")]
+        public Guid? CategoryId { get; set; }
     }
 
     public class TransactionResponse
@@ -24,6 +27,8 @@ namespace FinanceTracker.Api.DTOs
         public decimal Amount { get; set; }
         public decimal BalanceAfter { get; set; }
         public Guid AccountId { get; set; } = Guid.Empty;
+        public Guid CategoryId { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

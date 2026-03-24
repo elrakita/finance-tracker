@@ -38,7 +38,7 @@
                 @for (tx of transactions; track tx.id) {
                   <tr>
                     <td class="date-cell">{{ tx.createdAt | date:'shortDate' }}</td>
-                    <td class="category-cell">{{ tx.category }}</td>
+                    <td class="category-cell">{{ tx.categoryName }}</td>
                     <td [class]="tx.type === 1 ? 'amount-income' : 'amount-expense'">
                       {{ tx.type === 1 ? '+' : '-' }}${{ tx.amount | number:'1.2-2' }}
                     </td>

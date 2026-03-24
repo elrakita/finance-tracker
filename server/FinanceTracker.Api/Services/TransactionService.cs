@@ -30,11 +30,14 @@ namespace FinanceTracker.Api.Services
                     t."Type",
                     t."Amount",
                     t."AccountId",
+                    t."CategoryId",
+                    c."Name" AS "CategoryName",
                     t."CreatedAt",
                     t."UpdatedAt",
                     SUM(CASE WHEN t."Type" = {(int)TransactionType.Income} THEN t."Amount" ELSE -t."Amount" END) 
                         OVER (ORDER BY t."CreatedAt" ASC, t."Id" ASC) AS "BalanceAfter"
                 FROM "Transactions" as t
+                LEFT JOIN "Categories" as c ON t."CategoryId" = c."Id" 
                 WHERE t."AccountId" = {accountGuid} AND t."UserId" = {userId}
                 """);
 
@@ -69,6 +72,7 @@ namespace FinanceTracker.Api.Services
                 Amount = request.Amount,
                 AccountId = request.AccountId,
                 UserId = userId,
+                CategoryId = request.CategoryId!.Value,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

@@ -62,6 +62,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+
+
 var app = builder.Build();
 
 app.UseRouting();

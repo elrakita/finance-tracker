@@ -17,6 +17,7 @@ export interface CreateTransactionRequest {
   accountId: string;
   amount: number;
   type: TransactionType;
+  categoryId: string;
 }
 
 

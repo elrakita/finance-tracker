@@ -8,7 +8,7 @@ import { TransactionService } from '../../services/transaction.service';
 import { Account, AccountType } from '../../models/account';
 import { AccountDialogComponent } from '../account-dialog/account-dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
-import { TransactionFormComponent } from '../transaction-form/transaction-form';
+import { TransactionDialogComponent } from '../transaction-dialog/transaction-dialog';
 
 
 @Component({
@@ -126,7 +126,7 @@ export class AccountListComponent implements OnInit {
 
 
   onAddTransaction(account: Account) {
-     const dialogRef = this.dialog.open(TransactionFormComponent, {
+     const dialogRef = this.dialog.open(TransactionDialogComponent, {
       width: '600px',
       data: { accountId: account.id }
     });
