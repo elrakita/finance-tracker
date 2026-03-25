@@ -26,7 +26,7 @@
 
   .nav-actions {
     display: flex;
-    gap: 1.5rem; // Increased gap for Settings and Logout
+    gap: 1.5rem;
     align-items: center;
 
     button {
@@ -87,7 +87,6 @@
   }
 
 
-  /* Settings Button Styling */
   .settings-btn {
     background: rgba(139, 115, 85, 0.1);
     border: 1px solid rgba(139, 115, 85, 0.2);
@@ -106,18 +105,6 @@
       border-color: #8b7355;
       transform: translateY(-1px);
     }
-  }
-
-  /* Re-using your existing Logout/Login style */
-  .login-btn {
-    background: none;
-    border: none;
-    color: #8b7355;
-    font-weight: 600;
-    cursor: pointer;
-    transition: color 0.2s;
-
-    &:hover { color: #5d4e37; }
   }
 
   .register-btn {
