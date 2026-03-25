@@ -13,12 +13,12 @@
       </div>
       <div class="nav-actions">
         <button class="settings-btn" [matMenuTriggerFor]="settingsMenu">
-          <span class="btn-icon">⚙️</span>
+          <mat-icon>settings</mat-icon>
           Settings
         </button>
 
         <button class="settings-btn" (click)="onLogout()">
-          <span class="btn-icon">🚪</span>
+          <mat-icon>logout</mat-icon>
           Log Out
         </button>
       </div>
@@ -27,7 +27,7 @@
 
   <mat-menu #settingsMenu="matMenu" class="beige-settings-menu">
     <button mat-menu-item routerLink="/categories">
-      <span class="menu-icon">🏷️</span>
+      <mat-icon>category</mat-icon>
       <span class="menu-item">Manage Categories</span>
     </button>
   </mat-menu>

@@ -2,10 +2,10 @@
   <h2>Manage Categories</h2>
 
   <div class="header-actions">
-    <button class="create-item-btn" (click)="onCreate()">
-        <span class="btn-icon">➕</span>
-        Create New Category
-    </button>
+        <button class="create-item-btn" (click)="onCreate()">
+          <mat-icon>add</mat-icon>
+          <span>Create New Category</span>
+        </button>
   </div>
 
   @if (loading) {
@@ -19,8 +19,18 @@
   <div class="items-grid">
     @for (cat of categories; track cat.id) {
       <div class="item-card">
+        <div class="card-actions">
+          @if (!cat.isDefault) {
+            <div class="card-actions">
+              <button class="ellipsis-btn" (click)="$event.stopPropagation()">⋮</button>
+              <div class="action-buttons">
+                <button class="edit-btn" (click)="$event.stopPropagation(); onEdit(cat)">Edit</button>
+                <button class="delete-btn" (click)="$event.stopPropagation(); onDelete(cat)">Delete</button>
+              </div>
+            </div> 
+          }
+        </div>
         <div class="item-accent" [style.background]="cat.color"></div>
-        
         <div class="item-header-row">
           <div class="item-icon-box" [style.background-color]="cat.color + '22'">
             {{ cat.icon }}
@@ -30,15 +40,11 @@
 
         <div class="item-meta">
           @if (cat.isDefault) {
-            <span class="system-tag">🔒 System Default</span>
+            <mat-icon>lock</mat-icon>
+            <span>System Default</span>
           } @else {
-            <span class="user-tag">👤 Custom Category</span>
-          }
-        </div>
-
-        <div class="item-actions">
-          @if (!cat.isDefault) {
-            <button class="delete-btn" (click)="onDeleteCategory(cat.id)">🗑️</button>
+            <mat-icon>person</mat-icon>
+            <span>Custom Category</span>
           }
         </div>
       </div>

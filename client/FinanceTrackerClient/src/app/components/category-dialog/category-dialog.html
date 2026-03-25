@@ -1,0 +1,95 @@
+<h2 mat-dialog-title>
+  {{ isEditMode ? 'Edit Category' : 'Create New Category' }}
+</h2>
+
+<mat-dialog-content>
+  @if (successMessage) {
+    <mat-card class="alert-card success" appearance="filled">
+      <mat-card-content>
+        <div class="alert-container">
+          <mat-icon class="alert-icon">check_circle</mat-icon>
+          <div class="alert-content">
+            <span class="alert-title">Success!</span>
+            <p>{{ successMessage }}</p>
+            <small>Closing...</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (errorMessage) {
+    <mat-card class="alert-card error" appearance="filled">
+      <mat-card-content>
+        <div class="alert-container">
+          <mat-icon class="alert-icon">error</mat-icon>
+          <div class="alert-content">
+            <span class="alert-title">Error</span>
+            <p>{{ errorMessage }}</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (!successMessage) {
+    <form [formGroup]="categoryForm" class="dialog-form-column">
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Category Name</mat-label>
+        <input matInput formControlName="name" placeholder="e.g. Groceries">
+        <mat-error>{{ getErrorMessage('name') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Icon (Emoji)</mat-label>
+        <input matInput formControlName="icon" placeholder="e.g. 🛒">
+        <mat-error>{{ getErrorMessage('icon') }}</mat-error>
+      </mat-form-field>
+
+      <div class="color-section">
+        <label class="form-label">Category Color</label>
+        <div class="color-grid">
+          @for (color of presetColors; track color) {
+            <button 
+              type="button" 
+              class="color-swatch" 
+              [style.background-color]="color"
+              [class.active]="categoryForm.get('color')?.value === color"
+              (click)="categoryForm.patchValue({color: color})">
+              @if (categoryForm.get('color')?.value === color) {
+                <span class="active-check">✓</span>
+              }
+            </button>
+          }
+          <div class="custom-swatch-item">
+            <input type="color" id="color" formControlName="color" class="hidden-color-input">
+            <label for="color" class="custom-swatch-label" [style.background-color]="categoryForm.get('color')?.value">
+              @if (!presetColors.includes(categoryForm.get('color')?.value)) {
+                <span class="active-check">✓</span>
+              } @else {
+                <span class="plus-icon">+</span>
+              }
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
+    <mat-icon>close</mat-icon> Cancel
+  </button>
+  
+  <button 
+    mat-flat-button 
+    color="primary" 
+    (click)="onSubmit()" 
+    [disabled]="isLoading || categoryForm.invalid">
+    <mat-icon>{{ isLoading ? 'hourglass_empty' : 'check_circle' }}</mat-icon>
+    <span>{{ isEditMode ? 'Update Category' : 'Create Category' }}</span>
+  </button>
+</mat-dialog-actions>

@@ -1,16 +1,17 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { CategoryService } from '../../services/category.service';
 import { Category } from '../../models/category';
 import { Subscription } from 'rxjs';
-import { CategoryFormComponent } from '../category-form/category-form';
+import { CategoryDialogComponent } from '../category-dialog/category-dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
-  imports: [CommonModule, MatDialogModule],
+  imports: [CommonModule, MatDialogModule, MatIconModule],
   templateUrl: './category-list.html',
   styleUrl: './category-list.scss'
 })
@@ -51,7 +52,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   }
 
   onCreate(): void {
-    const dialogRef = this.dialog.open(CategoryFormComponent, {
+    const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: '500px',
       data: null
     });
@@ -62,8 +63,20 @@ export class CategoryListComponent implements OnInit, OnDestroy {
       }
     });
   }
+  
+  onEdit(account: any) {
+    const dialogRef = this.dialog.open(CategoryDialogComponent, {
+      data: account,
+      width: '600px'
+    });
 
-  onDeleteCategory(category: any): void {
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadCategories();
+      }
+    });
+  }
+  onDelete(category: any): void {
     if (!category || category.isDefault) {
       return;
     }
@@ -80,7 +93,6 @@ export class CategoryListComponent implements OnInit, OnDestroy {
       if (!confirmed) {
         return;
       }
-      // Server delete endpoint does not exist yet; if added use categoryService.deleteCategory(category.id)
       console.warn('Delete category is not implemented in API yet.');
     });
   }

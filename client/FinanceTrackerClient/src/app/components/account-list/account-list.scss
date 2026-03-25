@@ -45,10 +45,13 @@
         display: flex;
         align-items: center;
 
-        &::before {
-          content: '👤';
-          margin-right: 0.75rem;
-          font-size: 1.2rem;
+        :first-child {
+          margin-right: 0.6rem;
+          font-size: 28px;
+        }
+
+        span {
+          padding-top: 3px;
         }
       }
 
@@ -61,7 +64,6 @@
         align-items: center;
 
         &::before {
-          content: '💰';
           margin-right: 0.5rem;
           font-size: 1.5rem;
         }
@@ -75,80 +77,15 @@
         align-items: center;
         margin-top: 1rem;
         padding-top: 1rem;
+        padding-top: 1rem;
         border-top: 1px solid rgba(139, 115, 85, 0.2);
 
-        &::before {
-          content: '📅';
+        :first-child {
           margin-right: 0.5rem;
         }
       }
 
       position: relative;
-
-      .card-actions {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        z-index: 10;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-
-        .ellipsis-btn {
-          background: none;
-          border: none;
-          font-size: 1.5rem;
-          color: #8b7355;
-          cursor: pointer;
-          padding: 0.5rem;
-          line-height: 1;
-          transition: color 0.2s;
-
-          &:hover { color: #5d4e37; }
-        }
-
-        .action-buttons {
-          display: flex;
-          gap: 0.5rem;
-          opacity: 0;
-          visibility: hidden;
-          transform: translateY(-10px);
-          transition: all 0.3s ease;
-          background: white;
-          padding: 0.5rem;
-          border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-          border: 1px solid rgba(139, 115, 85, 0.1);
-        }
-
-        &:hover .action-buttons {
-          opacity: 1;
-          visibility: visible;
-          transform: translateY(0);
-        }
-      }
-
-      .edit-btn, .delete-btn {
-        padding: 0.4rem 0.8rem;
-        border-radius: 8px;
-        border: none;
-        font-size: 0.75rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .edit-btn {
-        background: #deb887;
-        color: #5d4e37;
-        &:hover { background: #d2b48c; }
-      }
-
-      .delete-btn {
-        background: #ff6b6b;
-        color: white;
-        &:hover { background: #ee5253; }
-      }
     }
   }
 }
@@ -240,8 +177,8 @@
     width: 40px;
     height: 40px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #8b6914, #b8860b);
-    color: white;
+    background: linear-gradient(135deg, #d2b48c, #deb887);
+    color: #5d4e37;
     border: none;
     cursor: pointer;
     display: flex;
@@ -259,8 +196,9 @@
 
     &:hover {
       transform: scale(1.05);
-      background: #5d4e37;
       box-shadow: 0 6px 16px rgba(93, 78, 55, 0.3);
+      background: linear-gradient(135deg, #8B7355, #6F5B43);
+    color: white;
     }
   }
 }
@@ -324,10 +262,6 @@ mat-drawer-content {
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  /*.account-type {
-    margin-bottom: 0;
-  }*/
 }
 
 .drawer-header {
@@ -441,8 +375,7 @@ mat-drawer-content {
   letter-spacing: 0.5px;
   box-shadow: 0 2px 8px rgba(93, 78, 55, 0.2);
 
-  &::before {
-    content: '💳';
+  :first-child {
     margin-right: 0.5rem;
   }
 }

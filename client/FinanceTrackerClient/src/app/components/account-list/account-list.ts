@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
 import { AccountService } from '../../services/account.service';
 import { TransactionService } from '../../services/transaction.service';
 import { Account, AccountType } from '../../models/account';
@@ -16,7 +17,8 @@ import { TransactionDialogComponent } from '../transaction-dialog/transaction-di
   standalone: true,
   imports: [CommonModule,
     MatSidenavModule,
-    MatPaginatorModule],
+    MatPaginatorModule,
+    MatIconModule],
   templateUrl: './account-list.html',
   styleUrl: './account-list.scss'
 })
