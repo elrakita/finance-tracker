@@ -10,6 +10,7 @@ import { Account, AccountType } from '../../models/account';
 import { AccountDialogComponent } from '../account-dialog/account-dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 import { TransactionDialogComponent } from '../transaction-dialog/transaction-dialog';
+import { SignalRService } from '../../services/signalr.service';
 
 
 @Component({
@@ -36,11 +37,22 @@ export class AccountListComponent implements OnInit {
   currentPage = 0;
 
   constructor(private accountService: AccountService, 
-    private transactionService: TransactionService) 
+    private transactionService: TransactionService,
+    private signalRService: SignalRService
+  ) 
   { }
 
   ngOnInit(): void {
     this.loadAccounts();
+    this.signalRService.startConnection();
+  
+    this.signalRService.balanceUpdate$.subscribe(update => {
+      const account = this.accounts.find(a => a.id === update.accountId);
+      if (account) {
+        account.balance = update.newBalance;
+        console.log(`Balance updated for account ${account.name}: ${update.newBalance}`);
+      }
+    });
   }
 
   loadAccounts(): void {

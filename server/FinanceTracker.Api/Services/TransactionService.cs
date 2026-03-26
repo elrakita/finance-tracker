@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 using FinanceTracker.Api.Data;
 using FinanceTracker.Api.Models;
 using FinanceTracker.Api.DTOs;
@@ -9,10 +10,12 @@ namespace FinanceTracker.Api.Services
     public class TransactionService : ITransactionService
     {
         private readonly FinanceContext _context;
+        private readonly IAccountService _accountService;
 
-        public TransactionService(FinanceContext context)
+        public TransactionService(FinanceContext context, IAccountService accountService)
         {
             _context = context;
+            _accountService = accountService;
         }
 
         public async Task<ApiPaginatedResponse<TransactionResponse>> GetAccountTransactionsAsync(
@@ -79,6 +82,7 @@ namespace FinanceTracker.Api.Services
 
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
+            await _accountService.NotifyBalanceUpdateAsync(userId, request.AccountId);
 
             return new ApiResponse<TransactionResponse>
             {
