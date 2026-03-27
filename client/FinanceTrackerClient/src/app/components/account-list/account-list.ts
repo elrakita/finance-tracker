@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -11,6 +11,7 @@ import { AccountDialogComponent } from '../account-dialog/account-dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 import { TransactionDialogComponent } from '../transaction-dialog/transaction-dialog';
 import { SignalRService } from '../../services/signalr.service';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class AccountListComponent implements OnInit {
   error: string | null = null;
   transactionsError: string | null = null;
   private dialog = inject(MatDialog);
+  private signalRSub!: Subscription;
 
   selectedAccount: Account | null = null;
   transactions: any[] = [];
@@ -38,7 +40,8 @@ export class AccountListComponent implements OnInit {
 
   constructor(private accountService: AccountService, 
     private transactionService: TransactionService,
-    private signalRService: SignalRService
+    private signalRService: SignalRService,
+    private cdr: ChangeDetectorRef
   ) 
   { }
 
@@ -46,11 +49,12 @@ export class AccountListComponent implements OnInit {
     this.loadAccounts();
     this.signalRService.startConnection();
   
-    this.signalRService.balanceUpdate$.subscribe(update => {
+    this.signalRSub = this.signalRService.balanceUpdate$.subscribe(update => {
       const account = this.accounts.find(a => a.id === update.accountId);
       if (account) {
         account.balance = update.newBalance;
         console.log(`Balance updated for account ${account.name}: ${update.newBalance}`);
+        this.cdr.detectChanges(); 
       }
     });
   }
@@ -138,7 +142,6 @@ export class AccountListComponent implements OnInit {
     });
   }
 
-
   onAddTransaction(account: Account) {
      const dialogRef = this.dialog.open(TransactionDialogComponent, {
       width: '600px',
@@ -197,5 +200,11 @@ export class AccountListComponent implements OnInit {
   onDeleteTransaction(transaction: any) {
     // Implement delete logic here
     console.log('Delete transaction:', transaction.id);
+  }
+
+  ngOnDestroy() {
+    if (this.signalRSub) {
+      this.signalRSub.unsubscribe();
+    }
   }
 }

@@ -88,7 +88,6 @@ export class TransactionDialogComponent implements OnInit {
 
     this.transactionService.createTransaction(request).subscribe({
       next: (response) => {
-        this.isLoading = false;
         if (response.success) {
           this.successMessage = response.message;
           setTimeout(() => this.dialogRef.close(true), 2000);
