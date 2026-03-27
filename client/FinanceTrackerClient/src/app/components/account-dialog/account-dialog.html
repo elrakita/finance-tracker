@@ -18,7 +18,7 @@
     </mat-card>
   }
 
-  @if (errorMessage) {
+  @if (!isLoading && errorMessage) {
     <mat-card class="alert-card error" appearance="filled">
       <mat-card-content>
         <div class="alert-container">
@@ -86,6 +86,6 @@
     } @else {
       <mat-icon>check_circle</mat-icon>
     }
-    <span>Create Account</span>
+    <span>{{ isEditMode ? 'Save Account' : 'Create Account' }}</span>
   </button>
 </mat-dialog-actions>
