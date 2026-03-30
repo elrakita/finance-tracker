@@ -12,7 +12,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 import { TransactionDialogComponent } from '../transaction-dialog/transaction-dialog';
 import { SignalRService } from '../../services/signalr.service';
 import { Subscription } from 'rxjs/internal/Subscription';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-account-list',
@@ -30,6 +30,7 @@ export class AccountListComponent implements OnInit {
   error: string | null = null;
   transactionsError: string | null = null;
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar)
   private signalRSub!: Subscription;
 
   selectedAccount: Account | null = null;
@@ -49,7 +50,7 @@ export class AccountListComponent implements OnInit {
     this.loadAccounts();
     this.signalRService.startConnection();
   
-    this.signalRSub = this.signalRService.balanceUpdate$.subscribe(update => {
+    this.signalRSub = this.signalRService.balanceData$.subscribe(update => {
       const account = this.accounts.find(a => a.id === update.accountId);
       if (account) {
         account.balance = update.newBalance;
@@ -143,7 +144,7 @@ export class AccountListComponent implements OnInit {
   }
 
   onAddTransaction(account: Account) {
-     const dialogRef = this.dialog.open(TransactionDialogComponent, {
+    const dialogRef = this.dialog.open(TransactionDialogComponent, {
       width: '600px',
       data: { accountId: account.id }
     });

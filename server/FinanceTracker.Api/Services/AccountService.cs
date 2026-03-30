@@ -5,6 +5,7 @@ using FinanceTracker.Api.Interfaces;
 using FinanceTracker.Api.DTOs;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace FinanceTracker.Api.Services
 {
@@ -12,11 +13,15 @@ namespace FinanceTracker.Api.Services
     {
         private readonly FinanceContext _context;
         private readonly IHubContext<FinanceHub> _hubContext;
+        private readonly IHttpContextAccessor _httpContextAccessor; 
 
-        public AccountService(FinanceContext context, IHubContext<FinanceHub> hubContext)
+        public AccountService(FinanceContext context, 
+            IHubContext<FinanceHub> hubContext, 
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _hubContext = hubContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<List<AccountResponse>> GetUserAccountsWithBalancesAsync(string userId)
@@ -62,10 +67,13 @@ namespace FinanceTracker.Api.Services
             var account = await GetUserAccountByIdAsync(userId, accountId);
             if (account != null)
             {
+                var connectionId = _httpContextAccessor.HttpContext?.Request.Headers["X-SignalR-Connection-Id"].ToString();
                 await _hubContext.Clients.User(userId).SendAsync(
                     "ReceiveBalanceUpdate", 
                     accountId, 
-                    account.Balance
+                    account.Balance,
+                    account.Name,
+                    connectionId
                 );
             }
         }

@@ -28,6 +28,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<FinanceContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+    options.User.RequireUniqueEmail = true;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireDigit = false; 

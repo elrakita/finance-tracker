@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Transaction, CreateTransactionRequest } from '../models/transaction';
 import { ApiResponse, ApiPaginatedResponse} from '../models/api-response';
 import { environment } from '../../environments/environment';
-import { HttpParams } from '@angular/common/http';
+import { SignalRService } from './signalr.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +12,18 @@ import { HttpParams } from '@angular/common/http';
 export class TransactionService {
   private apiUrl = `${environment.apiUrl}/transactions`;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private signalRService: SignalRService 
+  ) { }
 
   createTransaction(transaction: CreateTransactionRequest): Observable<ApiResponse<Transaction>> {
-    return this.http.post<ApiResponse<Transaction>>(this.apiUrl, transaction);
+    const connectionId = this.signalRService.getConnectionId();
+    let headers = new HttpHeaders();
+    if (connectionId) {
+      headers = headers.set('X-SignalR-Connection-Id', connectionId);
+    }
+    return this.http.post<ApiResponse<Transaction>>(this.apiUrl, transaction, {headers});
   }
   
   getTransactionsByAccount(id: string, page: number, limit: number): Observable<ApiPaginatedResponse<Transaction[]>> {
